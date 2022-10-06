@@ -1,0 +1,29 @@
+package com.seonko.OurLittleDiary.domain;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity(name = "diary")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Diary {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "diary_name", nullable = false)
+    private String diaryName;
+
+    @Column(name = "diary_create_date", nullable = false)
+    private LocalDateTime diaryCreateDate;
+
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
+}
