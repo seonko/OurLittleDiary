@@ -28,48 +28,48 @@
       </main>
     </body>
   </template>
-  
-  <script>
-  
-  export default {
-    data () {
-      return {
-        email: '',
-        password: '',
-        naverLogin: null
-      }
-    },
-    methods: {
-      login () {
-        this.axios({
-          url: '/api/login',
-          method: 'post',
-          params: { email: this.email, password: this.password },
-          responseType: 'json'
-        }).then((response) => {
-          if (response.data !== '') {
-            this.$store.commit('member', response.data)
-            if (response.data.privilege === 0) {
-              this.$router.push('/admin')
-            } else {
-              this.$router.push('/home')
-            }
+
+<script>
+
+export default {
+  data () {
+    return {
+      email: '',
+      password: '',
+      naverLogin: null
+    }
+  },
+  methods: {
+    login () {
+      this.axios({
+        url: '/api/login',
+        method: 'post',
+        params: { email: this.email, password: this.password },
+        responseType: 'json'
+      }).then((response) => {
+        if (response.data !== '') {
+          this.$store.commit('member', response.data)
+          if (response.data.privilege === 0) {
+            this.$router.push('/admin')
           } else {
-            alert('이메일 및 비밀번호를 확인해주세요')
+            this.$router.push('/home')
           }
-        })
-      },
-      socialLogin (provider) {
-        window.location.replace(
-          'http://narangnorang.com/oauth2/authorization/' + provider
-        )
-      }
+        } else {
+          alert('이메일 및 비밀번호를 확인해주세요')
+        }
+      })
+    },
+    socialLogin (provider) {
+      window.location.replace(
+        'http://narangnorang.com/oauth2/authorization/' + provider
+      )
     }
   }
-  </script>
-  
-  <style scoped>
-  
+}
+</script>
+
+<style scoped>
+
   body {
     align-items: center;
     padding-top: 200px;
@@ -77,7 +77,7 @@
     background-color: white;
     margin: auto;
   }
-  
+
   .logo {
     max-width: 200px;
     height: auto;
@@ -86,37 +86,37 @@
     max-width: 330px;
     padding: 15px;
   }
-  
+
   .form-signin .form-floating:focus-within {
     z-index: 2;
   }
-  
+
   .form-signin input[type="email"] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
-  
+
   .form-signin input[type="password"] {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }
-  
+
   .btn {
     margin-bottom: 20px;
   }
-  
+
   .btn-lg {
     font-weight: bold;
   }
-  
+
   .text-black {
     text-decoration: none;
     color: black;
     font-weight: bold;
   }
-  
+
   .oauthButton {
     margin: 15px;
     margin-top: 30px;
@@ -126,4 +126,3 @@
     filter: brightness(70%);
   }
   </style>
-  
