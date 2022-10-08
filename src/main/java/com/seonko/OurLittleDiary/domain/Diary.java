@@ -8,8 +8,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity(name = "diary")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Diary {
 
     @Id

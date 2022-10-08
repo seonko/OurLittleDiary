@@ -1,14 +1,10 @@
 package com.seonko.OurLittleDiary.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "diary_member")
-public class DiaryMember {
+@Entity(name = "post")
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,11 +15,20 @@ public class DiaryMember {
     @ManyToOne
     private Diary diary;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "content", nullable = false)
+    private String content;
+
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne
     private Member member;
 
-    @Column(name = "role", nullable = false)
-    private String role;
+    @Column(name = "content_create_date", nullable = false)
+    private LocalDateTime contentCreateDate;
+
+    @Column(name = "reply_count", nullable = false)
+    private Long replyCount;
 
 }
