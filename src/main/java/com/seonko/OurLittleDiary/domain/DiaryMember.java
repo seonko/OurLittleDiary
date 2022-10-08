@@ -1,11 +1,6 @@
 package com.seonko.OurLittleDiary.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity(name = "diary_member")
 public class DiaryMember {

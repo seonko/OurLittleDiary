@@ -1,7 +1,6 @@
 package com.seonko.OurLittleDiary.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity(name = "notification_invite")
 public class NotificationInvite {
