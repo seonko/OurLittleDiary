@@ -25,6 +25,7 @@
         </a>
         <p class="mt-5 text-muted">아직 계정이 없으신가요?</p>
         <p class="text-muted"><router-link to="/signUp" class="text-black">회원 가입</router-link>을 통해 일상을 공유해 보세요!</p>
+        <router-link to="/diaryList" class="text-black">Diary 이동</router-link>
       </form>
     </main>
   </body>
