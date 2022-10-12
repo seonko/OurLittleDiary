@@ -30,7 +30,6 @@
   </template>
 
 <script>
-
 export default {
   data () {
     return {
@@ -69,7 +68,6 @@ export default {
 </script>
 
 <style scoped>
-
   body {
     align-items: center;
     padding-top: 200px;
@@ -125,4 +123,4 @@ export default {
     cursor: pointer;
     filter: brightness(70%);
   }
-  </style>
+</style>

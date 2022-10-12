@@ -1,9 +1,12 @@
 package com.seonko.OurLittleDiary.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity(name = "member")
+@Getter
 public class Member {
 
     @Id
@@ -23,7 +26,7 @@ public class Member {
     @Column(name = "authority", nullable = false)
     private String authority;
 
-    @Column(name = "provider_id", nullable = false)
+    @Column(name = "provider_id")
     private String providerId;
 
     @Column(name = "create_date", nullable = false)
