@@ -1,10 +1,14 @@
 package com.seonko.OurLittleDiary.dto;
 
-import lombok.Data;
+import com.seonko.OurLittleDiary.domain.Member;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDTO {
 
     private Long id;
@@ -17,4 +21,11 @@ public class MemberDTO {
     private Boolean searchable;
     private String profileImage;
 
+    public Member toEntity() {
+        return Member.builder()
+                .email(email)
+                .password(password)
+                .nickname(nickname)
+                .build();
+    }
 }
