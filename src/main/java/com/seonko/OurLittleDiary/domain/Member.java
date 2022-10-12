@@ -30,7 +30,7 @@ public class Member {
     @Column(name = "authority", nullable = false)
     private String authority;
 
-    @Column(name = "provider_id", nullable = false)
+    @Column(name = "provider_id")
     private String providerId;
 
     @Column(name = "create_date", nullable = false)
