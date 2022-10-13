@@ -21,6 +21,7 @@ public class DiaryController {
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
 
+    // 다이어리 생성
     @PostMapping("/api/createDiary")
     public void createDiary(@RequestParam String diaryName, @RequestParam MultipartFile mFile) throws Exception {
         DiaryDTO diaryDTO = new DiaryDTO();
