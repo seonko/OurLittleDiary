@@ -1,10 +1,8 @@
 package com.seonko.OurLittleDiary.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.Member;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
-import com.seonko.OurLittleDiary.dto.MemberDTO;
 import com.seonko.OurLittleDiary.service.DiaryService;
 import com.seonko.OurLittleDiary.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,7 +26,6 @@ public class DiaryController {
     // 참여 멤버 검색
     @GetMapping("/api/diary/memberSearch")
     public List<Member> memberSearch(@RequestParam String keyword) throws Exception {
-        System.out.println(keyword);
         return memberService.memberSearch(keyword);
     }
 
