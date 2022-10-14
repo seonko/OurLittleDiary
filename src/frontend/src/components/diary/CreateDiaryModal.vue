@@ -5,10 +5,10 @@
         <p>다이어리 이름</p>
         <input type="text" v-model="diaryName" required>
       </div>
-      <!-- <div>
+      <div>
         <p>참여 인원</p>
-        <input type="text" v-model="diaryMember" required>
-      </div> -->
+        <input type="text" v-model="keyword" @keyup="memberSearch">
+      </div>
       <div>
         <p>다이어리 썸네일</p>
         <div>
@@ -34,8 +34,9 @@ export default {
   data () {
     return {
       diaryName: '',
-      // diaryMember: '',
+      keyword: '',
       thumbnail: '',
+      searchedMemberList: {},
       mFile: null
     }
   },
@@ -70,6 +71,29 @@ export default {
         .then((response) => {
           alert('다이어리 생성 완료')
           this.modalClose()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    memberSearch () {
+      this.axios.get('/api/diary/memberSearch', {
+        params: {
+          keyword: this.keyword
+        }
+      })
+      // this.axios({
+      //   url: '/api/diary/memberSearch',
+      //   method: 'GET',
+      //   data: {
+      //     params: {
+      //       keyword: this.keyword
+      //     }
+      //   }
+      // })
+        .then((response) => {
+          console.log(response.data)
+          // this.searchedMemberList = response.data.MemberDTO
         })
         .catch((error) => {
           console.log(error)

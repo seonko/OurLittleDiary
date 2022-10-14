@@ -44,4 +44,10 @@ public class MemberServiceImpl implements MemberService{
                                             .createDate(LocalDate.now())
                                             .build()).getId();
     }
+
+    // 다이어리 참여멤버 검색
+    @Override
+    public List<Member> memberSearch(String keyword) {
+        return memberRepository.findByNicknameContaining(keyword);
+    }
 }

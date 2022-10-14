@@ -1,9 +1,6 @@
 package com.seonko.OurLittleDiary.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,6 +8,8 @@ import java.time.LocalDate;
 @Getter
 @Builder
 @Entity(name = "member")
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id

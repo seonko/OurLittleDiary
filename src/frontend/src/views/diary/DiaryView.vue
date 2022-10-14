@@ -5,10 +5,6 @@
           <DiaryCalendar/>
           <DiaryPost/>
         </div>
-        <!-- <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
-          <DiaryPostList/>
-          <DiaryReply/>
-        </div> -->
       </div>
       <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
         <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
