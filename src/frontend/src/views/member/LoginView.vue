@@ -34,8 +34,7 @@ export default {
   data () {
     return {
       email: '',
-      password: '',
-      naverLogin: null
+      password: ''
     }
   },
   methods: {
