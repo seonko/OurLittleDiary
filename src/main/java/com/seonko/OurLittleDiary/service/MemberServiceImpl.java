@@ -41,8 +41,6 @@ public class MemberServiceImpl implements MemberService{
                 .email(memberDTO.getEmail())
                 .password(passwordEncoder.encode(memberDTO.getPassword()))
                 .nickname(memberDTO.getNickname())
-                .createDate(LocalDate.now())
-                .lastAccessDate(LocalDate.now())
                 .authority("ROLE_USER")
                 .searchable(Boolean.FALSE)
                 .build()).getId();
