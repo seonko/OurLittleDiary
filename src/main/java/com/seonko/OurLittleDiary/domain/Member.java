@@ -14,6 +14,8 @@ import java.time.LocalDate;
 @Getter
 @Builder
 @Entity(name = "member")
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
