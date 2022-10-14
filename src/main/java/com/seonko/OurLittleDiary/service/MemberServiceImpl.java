@@ -38,11 +38,14 @@ public class MemberServiceImpl implements MemberService{
     public Long save(MemberDTO memberDTO) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return memberRepository.save(Member.builder()
-                                            .email(memberDTO.getEmail())
-                                            .password(passwordEncoder.encode(memberDTO.getPassword()))
-                                            .nickname(memberDTO.getNickname())
-                                            .createDate(LocalDate.now())
-                                            .build()).getId();
+                .email(memberDTO.getEmail())
+                .password(passwordEncoder.encode(memberDTO.getPassword()))
+                .nickname(memberDTO.getNickname())
+                .createDate(LocalDate.now())
+                .lastAccessDate(LocalDate.now())
+                .authority("ROLE_USER")
+                .searchable(Boolean.FALSE)
+                .build()).getId();
     }
 
     // 다이어리 참여멤버 검색

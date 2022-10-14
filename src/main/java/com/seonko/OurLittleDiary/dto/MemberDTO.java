@@ -2,6 +2,7 @@ package com.seonko.OurLittleDiary.dto;
 
 import com.seonko.OurLittleDiary.domain.Member;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class MemberDTO {
 
     private Long id;
