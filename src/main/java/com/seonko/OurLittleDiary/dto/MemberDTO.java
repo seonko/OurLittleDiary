@@ -21,7 +21,6 @@ public class MemberDTO {
     private String providerId;
     private LocalDate createDate;
     private Boolean searchable;
-    private String profileImage;
 
     public Member toEntity() {
         return Member.builder()
