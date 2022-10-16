@@ -42,7 +42,7 @@ public class MemberServiceImpl implements MemberService{
                 .password(passwordEncoder.encode(memberDTO.getPassword()))
                 .nickname(memberDTO.getNickname())
                 .authority("ROLE_USER")
-                .searchable(Boolean.FALSE)
+                .searchable(memberDTO.getSearchable())
                 .build()).getId();
     }
 

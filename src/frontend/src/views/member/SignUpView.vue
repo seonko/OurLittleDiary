@@ -27,6 +27,15 @@
         </div>
         <br>
         <!-- <button type="button" class="btn btn-dark" @click="checkName">중복 체크</button> -->
+        아이디 검색을 허용하시겠습니까?
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" v-model="searchable" value=true checked>
+          <label class="form-check-label" for="inlineRadio1">예</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" v-model="searchable" value="false">
+          <label class="form-check-label" for="inlineRadio2">아니오</label>
+        </div>
         <br>
         <br>
         <button type="submit" class="w-100 btn btn-outline-dark btn-lg">회원가입</button>
@@ -40,24 +49,24 @@ export default {
   name: 'SignUpView',
   data () {
     return {
+      requestBody: {},
       email: '',
       password: '',
       passwordForChecking: '',
-      nickname: ''
+      nickname: '',
+      searchable: true
     }
   },
   methods: {
     signUp (event) {
-      this.axios({
-        url: '/api/signUp',
-        method: 'POST',
-        params: {
-          email: this.email,
-          password: this.password,
-          nickname: this.nickname
-        }
-      })
-        .then((response) => {
+      this.reqeustBody = {
+        email: this.email,
+        password: this.password,
+        nickname: this.nickname,
+        searchable: this.searchable
+      }
+      this.axios.post('/api/signUp', this.reqeustBody)
+        .then((res) => {
           alert('회원가입 완료')
           this.$router.push('/login')
         })
@@ -65,6 +74,25 @@ export default {
           console.log(error)
         })
     }
+    // signUp (event) {
+    //   this.axios({
+    //     url: '/api/signUp',
+    //     method: 'POST',
+    //     params: {
+    //       email: this.email,
+    //       password: this.password,
+    //       nickname: this.nickname,
+    //       searchable: this.searchable
+    //     }
+    //   })
+    //     .then((response) => {
+    //       alert('회원가입 완료')
+    //       this.$router.push('/login')
+    //     })
+    //     .catch((error) => {
+    //       console.log(error)
+    //     })
+    // }
   }
 }
 </script>

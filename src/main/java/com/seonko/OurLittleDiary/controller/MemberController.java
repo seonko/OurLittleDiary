@@ -3,10 +3,7 @@ package com.seonko.OurLittleDiary.controller;
 import com.seonko.OurLittleDiary.dto.MemberDTO;
 import com.seonko.OurLittleDiary.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MemberController {
@@ -16,8 +13,7 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/api/signUp")
-    public Long insertMember(MemberDTO memberDTO) throws Exception {
-        System.out.println(memberDTO);
+    public Long insertMember(@RequestBody MemberDTO memberDTO) throws Exception {
         return memberService.save(memberDTO);
     }
 }
