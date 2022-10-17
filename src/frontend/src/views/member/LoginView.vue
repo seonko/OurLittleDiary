@@ -1,17 +1,17 @@
 <template>
     <body class="text-center">
       <main class="form-signin w-100 m-auto">
-        <form @keyup.enter="login()">
+        <form @submit.prevent="login()">
           <img class="logo" :src="require('@/assets/common/logo.png')">
           <div class="form-floating">
-            <input type="email" class="form-control" id="floatingInput" v-model="email" required="required" placeholder="abc@example.com">
+            <input type="email" class="form-control" v-model="email" required="required" placeholder="email">
             <label for="floatingInput">Email address</label>
           </div>
           <div class="form-floating">
-            <input type="password" class="form-control" id="floatingPassword" v-model="password" required="required" placeholder="Password">
+            <input type="password" class="form-control" v-model="password"  required="required" placeholder="Password">
             <label for="floatingPassword">Password</label>
           </div>
-          <button class="w-100 btn btn-outline-dark btn-lg" type="button" @click="login">로그인</button>
+          <button class="w-100 btn btn-outline-dark btn-lg" type="submit">로그인</button>
           <router-link class="mt-5 text-black" to="/findPw">Forgot Password?</router-link><br>
           <a @click="socialLogin('kakao')">
             <img class="oauthButton" :src="require('@/assets/member/icon_kakao.png')"/>
@@ -33,29 +33,27 @@
 export default {
   data () {
     return {
+      requestBody: {},
       email: '',
       password: ''
     }
   },
   methods: {
-    login () {
-      this.axios({
-        url: '/api/login',
-        method: 'post',
-        params: { email: this.email, password: this.password },
-        responseType: 'json'
-      }).then((response) => {
-        if (response.data !== '') {
-          this.$store.commit('member', response.data)
-          if (response.data.privilege === 0) {
-            this.$router.push('/admin')
-          } else {
-            this.$router.push('/home')
-          }
-        } else {
-          alert('이메일 및 비밀번호를 확인해주세요')
-        }
-      })
+    login (event) {
+      this.requestBody = {
+        username: this.email,
+        password: this.password
+      }
+
+      this.axios.post('/login', this.requestBody)
+        .then((res) => {
+          this.$router.push('/diaryList')
+        })
+        .catch((err) => {
+          alert('로그인 실패')
+          console.log(err)
+          this.$router.push('/login')
+        })
     },
     socialLogin (provider) {
       window.location.replace(

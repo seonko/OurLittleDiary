@@ -74,25 +74,6 @@ export default {
           console.log(error)
         })
     }
-    // signUp (event) {
-    //   this.axios({
-    //     url: '/api/signUp',
-    //     method: 'POST',
-    //     params: {
-    //       email: this.email,
-    //       password: this.password,
-    //       nickname: this.nickname,
-    //       searchable: this.searchable
-    //     }
-    //   })
-    //     .then((response) => {
-    //       alert('회원가입 완료')
-    //       this.$router.push('/login')
-    //     })
-    //     .catch((error) => {
-    //       console.log(error)
-    //     })
-    // }
   }
 }
 </script>
