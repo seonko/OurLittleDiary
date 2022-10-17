@@ -2,21 +2,12 @@ package com.seonko.OurLittleDiary.service;
 
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
-import com.seonko.OurLittleDiary.repository.DiaryRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.seonko.OurLittleDiary.dto.DiaryMemberDTO;
+import com.seonko.OurLittleDiary.dto.MemberDTO;
 
-import javax.transaction.Transactional;
+public interface DiaryService {
 
-@RequiredArgsConstructor
-@Service
-public class DiaryService {
-
-    private final DiaryRepository diaryRepository;
-
-    @Transactional
-    public Diary createDiary(DiaryDTO diaryDTO) throws Exception {
-        return diaryRepository.save(diaryDTO.toEntity());
-    }
+    Diary createDiary(DiaryDTO diaryDTO) throws Exception;
+//    Long diaryMemberSave(DiaryMemberDTO diaryMemberDTO, DiaryDTO diaryDTO, MemberDTO memberDTO) throws Exception;
 
 }
