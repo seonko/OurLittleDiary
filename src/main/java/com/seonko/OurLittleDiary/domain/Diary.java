@@ -29,10 +29,8 @@ public class Diary {
     private LocalDateTime diaryCreateDate;
 
     @Builder
-    public Diary(Long id, String diaryName, LocalDateTime diaryCreateDate) {
-        this.id = id;
+    public Diary(String diaryName) {
         this.diaryName = diaryName;
-        this.diaryCreateDate = diaryCreateDate;
     }
 
 }

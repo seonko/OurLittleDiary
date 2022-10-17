@@ -19,9 +19,7 @@ public class DiaryDTO {
 
     public Diary toEntity() {
         Diary build = Diary.builder()
-                .id(id)
                 .diaryName(diaryName)
-                .diaryCreateDate(diaryCreateDate)
                 .build();
         return build;
     }

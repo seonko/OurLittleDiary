@@ -3,7 +3,7 @@ package com.seonko.OurLittleDiary.controller;
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.Member;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
-import com.seonko.OurLittleDiary.service.DiaryService;
+import com.seonko.OurLittleDiary.service.DiaryServiceImpl;
 import com.seonko.OurLittleDiary.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 public class DiaryController {
 
-    private final DiaryService diaryService;
+    private final DiaryServiceImpl diaryService;
     private final MemberService memberService;
 
     @Value("${spring.servlet.multipart.location}")
@@ -34,7 +34,10 @@ public class DiaryController {
     public void createDiary(@RequestParam String diaryName, @RequestParam MultipartFile mFile) throws Exception {
         DiaryDTO diaryDTO = new DiaryDTO();
         diaryDTO.setDiaryName(diaryName);
+        // 다이어리 생성
         Diary diary = diaryService.createDiary(diaryDTO);
+        // 다이어리 멤버 추가
+        ////////////////////////////////////////
         String thumbnail = diary.getId().toString();
         try {
             File file = new File(uploadPath + "diary/" + thumbnail);
