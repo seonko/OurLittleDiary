@@ -46,7 +46,7 @@ export default {
       diaryName: '',
       keyword: '',
       thumbnail: '',
-      searchedMemberList: {},
+      searchedMemberList: [],
       addedMemberList: [],
       mFile: null
     }
@@ -74,7 +74,7 @@ export default {
       const formData = new FormData()
       formData.append('mFile', this.mFile)
       formData.append('diaryName', this.diaryName)
-      formData.append('addedMemberList', this.addedMemberList)
+      formData.append('addedMemberList', JSON.stringify(this.addedMemberList))
       this.axios.post('/api/createDiary', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -96,6 +96,7 @@ export default {
       })
         .then((response) => {
           this.searchedMemberList = response.data
+          console.log(response.data)
         })
         .catch((error) => {
           console.log(error)
@@ -108,6 +109,7 @@ export default {
       //   this.addedMemberList.push(row)
       // }
       this.addedMemberList.push(row)
+      console.log(this.addedMemberList)
     }
   }
 }

@@ -4,7 +4,6 @@ import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.Member;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
 import com.seonko.OurLittleDiary.dto.DiaryMemberDTO;
-import com.seonko.OurLittleDiary.dto.MemberDTO;
 import com.seonko.OurLittleDiary.repository.DiaryMemberRepository;
 import com.seonko.OurLittleDiary.repository.DiaryRepository;
 import com.seonko.OurLittleDiary.repository.MemberRepository;
@@ -29,14 +28,13 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     // 다이어리 멤버 추가
-//    @Override
-//    @Transactional
-//    public Long diaryMemberSave(DiaryMemberDTO diaryMemberDTO, DiaryDTO diaryDTO, MemberDTO memberDTO) throws Exception {
-//        Diary diary = diaryRepository.findById(diaryDTO.getId()).orElse(null);
-//        Member member = memberRepository.findById(memberDTO.getId()).orElse(null);
-//        diaryMemberDTO.setDiary(diary);
-//        diaryMemberDTO.setMember(member);
-//        return diaryMemberRepository.save(diaryMemberDTO.toEntity());
-//    }
+    @Override
+    @Transactional
+    public Long diaryMemberSave(Diary diary, Member member) throws Exception {
+        DiaryMemberDTO diaryMemberDTO = new DiaryMemberDTO();
+        diaryMemberDTO.setDiary(diary);
+        diaryMemberDTO.setMember(member);
+        return diaryMemberRepository.save(diaryMemberDTO.toEntity()).getId();
+    }
 
 }
