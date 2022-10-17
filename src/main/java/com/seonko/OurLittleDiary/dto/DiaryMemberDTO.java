@@ -1,15 +1,25 @@
 package com.seonko.OurLittleDiary.dto;
 
+import com.seonko.OurLittleDiary.domain.Diary;
+import com.seonko.OurLittleDiary.domain.DiaryMember;
+import com.seonko.OurLittleDiary.domain.Member;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 public class DiaryMemberDTO {
 
     private Long id;
-    private Long diaryId;
-    private Long memberId;
+//    private Long diaryId;
+//    private Long memberId;
+    private Diary diary;
+    private Member member;
     private String role;
+
+    public DiaryMember toEntity() {
+        return DiaryMember.builder()
+                .diary(diary)
+                .member(member)
+                .build();
+    }
 
 }

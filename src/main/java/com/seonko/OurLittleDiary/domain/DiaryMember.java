@@ -1,8 +1,15 @@
 package com.seonko.OurLittleDiary.domain;
 
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity(name = "diary_member")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiaryMember {
 
     @Id
@@ -20,5 +27,11 @@ public class DiaryMember {
 
     @Column(name = "role", nullable = false)
     private String role;
+
+    @Builder
+    public DiaryMember(Diary diary, Member member) {
+        this.diary = diary;
+        this.member = member;
+    }
 
 }

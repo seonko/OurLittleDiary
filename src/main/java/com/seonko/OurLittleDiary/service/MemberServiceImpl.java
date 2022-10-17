@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -44,8 +45,8 @@ public class MemberServiceImpl implements MemberService{
                 .email(memberDTO.getEmail())
                 .password(passwordEncoder.encode(memberDTO.getPassword()))
                 .nickname(memberDTO.getNickname())
-                .authority("USER")
-                .searchable(memberDTO.getSearchable())
+                .authority("ROLE_USER")
+                .searchable(Boolean.FALSE)
                 .build()).getId();
     }
 

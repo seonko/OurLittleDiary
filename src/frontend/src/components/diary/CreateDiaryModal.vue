@@ -5,9 +5,19 @@
         <p>다이어리 이름</p>
         <input type="text" v-model="diaryName" required>
       </div>
+      <div v-if="addedMemberList.length">
+        <ul v-for="(row, idx) in addedMemberList" :key="idx">
+          <button>{{ row.nickname }}</button>
+        </ul>
+      </div>
       <div>
         <p>참여 인원</p>
         <input type="text" v-model="keyword" @keyup="memberSearch">
+      </div>
+      <div class="diary-member-container" v-if="searchedMemberList.length">
+        <ul class="diary-member-list" v-for="(row, idx) in searchedMemberList" :key="idx" @click="addMember(row)">
+          {{ row.nickname }}
+        </ul>
       </div>
       <div>
         <p>다이어리 썸네일</p>
@@ -37,6 +47,7 @@ export default {
       keyword: '',
       thumbnail: '',
       searchedMemberList: {},
+      addedMemberList: [],
       mFile: null
     }
   },
@@ -47,22 +58,23 @@ export default {
     remove () {
       this.thumbnail = ''
     },
-    thumbnailUpload (e) {
-      const files = e.target.files || e.dataTransfer.files
+    thumbnailUpload (event) {
+      const files = event.target.files || event.dataTransfer.files
       this.createImage(files[0])
       this.mFile = files[0]
     },
     createImage (file) {
       const reader = new FileReader()
-      reader.onload = (e) => {
-        this.thumbnail = e.target.result
+      reader.onload = (event) => {
+        this.thumbnail = event.target.result
       }
       reader.readAsDataURL(file)
     },
-    createDiary (e) {
+    createDiary () {
       const formData = new FormData()
       formData.append('mFile', this.mFile)
       formData.append('diaryName', this.diaryName)
+      formData.append('addedMemberList', this.addedMemberList)
       this.axios.post('/api/createDiary', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -82,22 +94,20 @@ export default {
           keyword: this.keyword
         }
       })
-      // this.axios({
-      //   url: '/api/diary/memberSearch',
-      //   method: 'GET',
-      //   data: {
-      //     params: {
-      //       keyword: this.keyword
-      //     }
-      //   }
-      // })
         .then((response) => {
-          console.log(response.data)
-          // this.searchedMemberList = response.data.MemberDTO
+          this.searchedMemberList = response.data
         })
         .catch((error) => {
           console.log(error)
         })
+    },
+    addMember (row, event) {
+      // if (this.addedMemberList.indexOf(row) < 0) {
+      //   event.preventDefault()
+      // } else {
+      //   this.addedMemberList.push(row)
+      // }
+      this.addedMemberList.push(row)
     }
   }
 }
@@ -123,5 +133,9 @@ img {
   height: 200px;
   border: 1px solid #303030;
   border-radius: 5px;
+}
+.diary-member-list:hover {
+  cursor: pointer;
+  background-color: rgb(46, 83, 247);
 }
 </style>
