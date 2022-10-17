@@ -3,9 +3,12 @@ package com.seonko.OurLittleDiary.domain;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Getter
 @Entity(name = "member")
@@ -52,5 +55,4 @@ public class Member {
         this.authority = authority;
         this.searchable = searchable;
     }
-
 }

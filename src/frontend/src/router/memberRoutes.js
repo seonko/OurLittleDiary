@@ -1,12 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-
-const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
+export default [
   {
     path: '/login',
     name: 'login',
@@ -16,22 +8,5 @@ const routes = [
     path: '/signUp',
     name: 'signUp',
     component: () => import('../views/member/SignUpView.vue')
-  },
-  {
-    path: '/diaryList',
-    name: 'diaryList',
-    component: () => import('../views/diary/DiaryListView.vue')
-  },
-  {
-    path: '/diary',
-    name: 'diary',
-    component: () => import('../views/diary/DiaryView.vue')
   }
 ]
-
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-})
-
-export default router
