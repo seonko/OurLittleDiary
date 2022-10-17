@@ -13,10 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -25,12 +22,18 @@ public class MemberServiceImpl implements MemberService{
     private MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Member> memberEntityWrapper = memberRepository.findByEmail(email);
-        Member memberEntity = memberEntityWrapper.orElse(null);
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return new User(memberEntity.getEmail(), memberEntity.getPassword(), authorities);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Member member = memberRepository.findByEmail(username);
+
+        if (member == null) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        return User.builder()
+                .username(member.getEmail())
+                .password(member.getPassword())
+                .roles(member.getAuthority())
+                .build();
     }
 
     @Transactional
@@ -41,8 +44,8 @@ public class MemberServiceImpl implements MemberService{
                 .email(memberDTO.getEmail())
                 .password(passwordEncoder.encode(memberDTO.getPassword()))
                 .nickname(memberDTO.getNickname())
-                .authority("ROLE_USER")
-                .searchable(Boolean.FALSE)
+                .authority("USER")
+                .searchable(memberDTO.getSearchable())
                 .build()).getId();
     }
 

@@ -23,15 +23,17 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        return http.authorizeRequests()
+        return http
+                .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/admin/**").authenticated()
 
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/diaryList")
+                .failureForwardUrl("/signUp")
                 .permitAll()
 
                 .and()
@@ -40,7 +42,11 @@ public class WebSecurityConfig {
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
 
-                .and().build();
+                .and()
+                .csrf()
+                .disable()
+
+                .build();
     }
 
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
