@@ -6,18 +6,21 @@ import com.seonko.OurLittleDiary.dto.DiaryDTO;
 import com.seonko.OurLittleDiary.dto.DiaryMemberDTO;
 import com.seonko.OurLittleDiary.repository.DiaryMemberRepository;
 import com.seonko.OurLittleDiary.repository.DiaryRepository;
-import com.seonko.OurLittleDiary.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
 
 @RequiredArgsConstructor
 @Service
 public class DiaryServiceImpl implements DiaryService {
 
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPath;
     private final DiaryRepository diaryRepository;
-    private final MemberRepository memberRepository;
     private final DiaryMemberRepository diaryMemberRepository;
 
     // 다이어리 생성
@@ -25,6 +28,19 @@ public class DiaryServiceImpl implements DiaryService {
     @Transactional
     public Diary createDiary(DiaryDTO diaryDTO) throws Exception {
         return diaryRepository.save(diaryDTO.toEntity());
+    }
+
+    // 썸네일 저장
+    @Override
+    public void saveThumbnail(Diary diary, MultipartFile mFile) {
+        String thumbnail = diary.getId().toString();
+        try {
+            File file = new File(uploadPath + "diary/" + thumbnail);
+            file.delete();
+            mFile.transferTo(new File(uploadPath + "diary/" + thumbnail +".png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // 다이어리 멤버 추가
