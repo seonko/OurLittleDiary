@@ -3,9 +3,8 @@ package com.seonko.OurLittleDiary.service;
 import com.seonko.OurLittleDiary.domain.Member;
 import com.seonko.OurLittleDiary.dto.MemberDTO;
 import com.seonko.OurLittleDiary.repository.MemberRepository;
+import com.seonko.OurLittleDiary.type.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,7 +23,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmail(username);
+        Member member = memberRepository.findByEmail(username).orElse(null);
 
         if (member == null) {
             throw new UsernameNotFoundException(username);
@@ -33,7 +32,7 @@ public class MemberServiceImpl implements MemberService{
         return User.builder()
                 .username(member.getEmail())
                 .password(member.getPassword())
-                .roles(member.getAuthority())
+                .roles(member.getAuthority().toString())
                 .build();
     }
 
@@ -45,7 +44,7 @@ public class MemberServiceImpl implements MemberService{
                 .email(memberDTO.getEmail())
                 .password(passwordEncoder.encode(memberDTO.getPassword()))
                 .nickname(memberDTO.getNickname())
-                .authority("ROLE_USER")
+                .authority(Authority.USER)
                 .searchable(Boolean.FALSE)
                 .build()).getId();
     }

@@ -31,9 +31,7 @@ public class WebSecurityConfig {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/diaryList")
-                .failureForwardUrl("/signUp")
+                .loginProcessingUrl("/api/login")
                 .permitAll()
 
                 .and()
