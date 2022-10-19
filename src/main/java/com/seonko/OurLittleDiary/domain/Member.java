@@ -1,5 +1,6 @@
 package com.seonko.OurLittleDiary.domain;
 
+import com.seonko.OurLittleDiary.type.Authority;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -32,7 +33,8 @@ public class Member {
     private String nickname;
 
     @Column(name = "authority", nullable = false)
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
     @Column(name = "provider_id")
     private String providerId;
@@ -49,7 +51,7 @@ public class Member {
     private Boolean searchable;
 
     @Builder
-    public Member(String email, String password, String nickname, String authority, Boolean searchable) {
+    public Member(String email, String password, String nickname, Authority authority, Boolean searchable) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;

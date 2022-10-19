@@ -5,9 +5,6 @@ import com.seonko.OurLittleDiary.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.http.HttpResponse;
 
 @RestController
 public class MemberController {
@@ -20,5 +17,4 @@ public class MemberController {
     public Long insertMember(@RequestBody MemberDTO memberDTO) throws Exception {
         return memberService.save(memberDTO);
     }
-
 }
