@@ -7,7 +7,7 @@
       </div>
       <div v-if="addedMemberList.length">
         <ul v-for="(row, idx) in addedMemberList" :key="idx">
-          <button>{{ row.nickname }}</button>
+          <button class="btn-nickname btn-info"><span>{{ row.nickname }}</span></button>
         </ul>
       </div>
       <div>
@@ -139,5 +139,8 @@ img {
 .diary-member-list:hover {
   cursor: pointer;
   background-color: rgb(46, 83, 247);
+}
+.btn-nickname:hover {
+  background-color: red !important;
 }
 </style>
