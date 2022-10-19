@@ -9,8 +9,6 @@ import lombok.Data;
 public class DiaryMemberDTO {
 
     private Long id;
-//    private Long diaryId;
-//    private Long memberId;
     private Diary diary;
     private Member member;
     private String role;

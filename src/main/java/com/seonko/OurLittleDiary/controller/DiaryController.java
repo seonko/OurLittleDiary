@@ -1,17 +1,16 @@
 package com.seonko.OurLittleDiary.controller;
 
+import com.seonko.OurLittleDiary.config.GsonConfig;
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.Member;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
 import com.seonko.OurLittleDiary.service.DiaryServiceImpl;
 import com.seonko.OurLittleDiary.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,9 +18,6 @@ public class DiaryController {
 
     private final DiaryServiceImpl diaryService;
     private final MemberService memberService;
-
-    @Value("${spring.servlet.multipart.location}")
-    private String uploadPath;
 
     // 참여 멤버 검색
     @GetMapping("/api/diary/memberSearch")
@@ -31,20 +27,15 @@ public class DiaryController {
 
     // 다이어리 생성
     @PostMapping("/api/createDiary")
-    public void createDiary(@RequestParam String diaryName, @RequestParam MultipartFile mFile) throws Exception {
+    public void createDiary(@RequestParam String diaryName, @RequestParam MultipartFile mFile, @RequestParam String addedMemberList) throws Exception {
         DiaryDTO diaryDTO = new DiaryDTO();
         diaryDTO.setDiaryName(diaryName);
-        // 다이어리 생성
         Diary diary = diaryService.createDiary(diaryDTO);
-        // 다이어리 멤버 추가
-        ////////////////////////////////////////
-        String thumbnail = diary.getId().toString();
-        try {
-            File file = new File(uploadPath + "diary/" + thumbnail);
-            file.delete();
-            mFile.transferTo(new File(uploadPath + "diary/" + thumbnail +".png"));
-        } catch (Exception e) {
-            e.printStackTrace();
+        diaryService.saveThumbnail(diary, mFile);
+
+        List<Member> memberList = new GsonConfig().mapFromJsonArray(String.valueOf(addedMemberList), Member.class);
+        for (Member member : memberList) {
+            diaryService.diaryMemberSave(diary, member);
         }
     }
 

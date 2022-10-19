@@ -25,7 +25,7 @@ public class DiaryMember {
     @ManyToOne
     private Member member;
 
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     private String role;
 
     @Builder

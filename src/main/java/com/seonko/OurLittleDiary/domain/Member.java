@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Getter
@@ -38,11 +39,11 @@ public class Member {
 
     @Column(name = "create_date", nullable = false)
     @CreatedDate
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     @Column(name = "last_access_date", nullable = false)
     @CreatedDate
-    private LocalDate lastAccessDate;
+    private LocalDateTime lastAccessDate;
 
     @Column(name = "searchable", nullable = false)
     private Boolean searchable;
