@@ -33,18 +33,21 @@
 export default {
   data () {
     return {
+      requestBody: {},
       email: '',
       password: ''
     }
   },
   methods: {
     login (event) {
-      const frm = new FormData()
-      frm.append('username', this.email)
-      frm.append('password', this.password)
-      this.axios.post('/api/login', frm)
+      this.requestBody = {
+        username: this.email,
+        password: this.password
+      }
+      this.axios.post('/login', this.requestBody)
         .then((res) => {
           alert('로그인 성공')
+          this.$router.push('/diaryList')
         })
         .catch((err) => {
           alert('로그인 실패')
