@@ -1,6 +1,7 @@
 package com.seonko.OurLittleDiary.service;
 
 import com.seonko.OurLittleDiary.domain.Diary;
+import com.seonko.OurLittleDiary.domain.DiaryMember;
 import com.seonko.OurLittleDiary.domain.Member;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
 import com.seonko.OurLittleDiary.dto.DiaryMemberDTO;
@@ -13,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.File;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -52,5 +55,17 @@ public class DiaryServiceImpl implements DiaryService {
         diaryMemberDTO.setMember(member);
         return diaryMemberRepository.save(diaryMemberDTO.toEntity()).getId();
     }
+
+    // 다이어리 멤버 리스트
+    @Override
+    public List<DiaryMember> diaryMemberList(Long memberId) throws Exception {
+        return diaryMemberRepository.findByMemberId(memberId);
+    }
+
+    // 다이어리 ID로 다이어리 조회
+//    @Override
+//    public Diary diaryFindById(Long diaryId) throws Exception {
+//        return diaryRepository.findById(diaryId);
+//    }
 
 }

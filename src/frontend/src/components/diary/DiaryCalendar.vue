@@ -26,13 +26,6 @@
                       {{day}}
                     </span>
                   </div>
-                  <!--
-                  <span v-if="isToday(currentYear, currentMonth, day)" class="rounded">
-                    {{day}}
-                  </span>
-                  <span v-else>
-                    {{day}}
-                  </span> -->
                 </td>
               </tr>
             </tbody>
@@ -57,8 +50,6 @@ export default {
       endOfDay: null,
       memoDatas: []
     }
-  },
-  components: {
   },
   mounted () {
     this.init()

@@ -2,6 +2,7 @@ package com.seonko.OurLittleDiary.controller;
 
 import com.seonko.OurLittleDiary.config.GsonConfig;
 import com.seonko.OurLittleDiary.domain.Diary;
+import com.seonko.OurLittleDiary.domain.DiaryMember;
 import com.seonko.OurLittleDiary.domain.Member;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
 import com.seonko.OurLittleDiary.service.DiaryServiceImpl;
@@ -37,6 +38,17 @@ public class DiaryController {
         for (Member member : memberList) {
             diaryService.diaryMemberSave(diary, member);
         }
+    }
+
+    // 다이어리 리스트
+    @GetMapping("/api/diaryList")
+    public List<Diary> diaryList(@RequestParam Long memberId) throws Exception {
+        List<DiaryMember> diaryMemberList = diaryService.diaryMemberList(memberId);
+        List<Diary> diaryList = new ArrayList<>();
+        for (DiaryMember diaryMember : diaryMemberList) {
+            diaryList.add(diaryMember.getDiary());
+        }
+        return diaryList;
     }
 
 }
