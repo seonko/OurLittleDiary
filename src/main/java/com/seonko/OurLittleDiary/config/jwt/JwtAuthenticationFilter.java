@@ -32,12 +32,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         ObjectMapper om = new ObjectMapper();
         LoginRequestDTO loginRequestDTO = null;
-//        System.out.println(request);
-//        try {
-//            System.out.println(request.getInputStream());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        System.out.println(request);
 
         try {
             loginRequestDTO = om.readValue(request.getInputStream(), LoginRequestDTO.class);

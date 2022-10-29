@@ -34,7 +34,7 @@ export default {
   data () {
     return {
       requestBody: {},
-      email: '',
+      username: '',
       password: ''
     }
   },
@@ -48,6 +48,7 @@ export default {
         .then((res) => {
           alert('로그인 성공')
           this.$router.push('/diaryList')
+          this.$store.dispatch('setToken', res.headers.authorization)
         })
         .catch((err) => {
           alert('로그인 실패')
