@@ -1,4 +1,4 @@
-package com.seonko.OurLittleDiary.config;
+package com.seonko.OurLittleDiary.util;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
-public class GsonConfig {
+public class GsonUtil {
     private static String PATTERN_DATE = "yyyy-MM-dd";
     private static String PATTERN_TIME = "HH:mm:ss";
     private static String PATTERN_DATETIME = String.format("%s %s", PATTERN_DATE, PATTERN_TIME);
