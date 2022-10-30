@@ -1,7 +1,6 @@
 package com.seonko.OurLittleDiary.controller;
 
-import com.seonko.OurLittleDiary.config.GsonConfig;
-import com.seonko.OurLittleDiary.config.auth.PrincipalDetails;
+import com.seonko.OurLittleDiary.util.GsonUtil;
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.DiaryMember;
 import com.seonko.OurLittleDiary.domain.Member;
@@ -36,7 +35,7 @@ public class DiaryController {
         Diary diary = diaryService.createDiary(diaryDTO);
         diaryService.saveThumbnail(diary, mFile);
 
-        List<Member> memberList = new GsonConfig().mapFromJsonArray(String.valueOf(addedMemberList), Member.class);
+        List<Member> memberList = new GsonUtil().mapFromJsonArray(String.valueOf(addedMemberList), Member.class);
         for (Member member : memberList) {
             diaryService.diaryMemberSave(diary, member);
         }
