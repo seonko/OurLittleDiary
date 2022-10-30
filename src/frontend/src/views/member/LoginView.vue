@@ -49,6 +49,7 @@ export default {
           alert('로그인 성공')
           this.$router.push('/diaryList')
           this.$store.dispatch('setToken', res.headers.authorization)
+          this.$cookies.set('rtk', res.headers.refresh_token, { httpOnly: true })
         })
         .catch((err) => {
           alert('로그인 실패')

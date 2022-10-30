@@ -1,6 +1,7 @@
 package com.seonko.OurLittleDiary.controller;
 
 import com.seonko.OurLittleDiary.config.GsonConfig;
+import com.seonko.OurLittleDiary.config.auth.PrincipalDetails;
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.DiaryMember;
 import com.seonko.OurLittleDiary.domain.Member;
@@ -8,6 +9,7 @@ import com.seonko.OurLittleDiary.dto.DiaryDTO;
 import com.seonko.OurLittleDiary.service.DiaryServiceImpl;
 import com.seonko.OurLittleDiary.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
