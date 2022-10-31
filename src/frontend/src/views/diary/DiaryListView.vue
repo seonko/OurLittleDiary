@@ -67,6 +67,7 @@ export default {
     },
     goToDiary (diaryId) {
       this.$router.push('/diary/' + diaryId)
+      this.$store.dispatch('setDiaryId', diaryId)
     }
   }
 }

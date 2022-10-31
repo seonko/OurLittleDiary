@@ -1,5 +1,6 @@
 <template>
-  <body>
+  <CreatePost v-if="fnPost === 'write'" />
+  <body v-else>
     <div class="bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
       <!-- <div v-if="member.id === memberId">
         <div style="margin-bottom:20px;"><button class="btn" @click="fnGoEditPage()">수정</button>
@@ -29,14 +30,27 @@
 </template>
 
 <script>
+import CreatePost from '@/components/diary/CreatePost'
 export default {
   data () {
     return {
+      fnPost: null
     }
   },
   components: {
+    CreatePost
   },
   methods: {
+  },
+  computed: {
+    check_fnPost () {
+      return this.$store.getters.fnPost
+    }
+  },
+  watch: {
+    check_fnPost (_fnPost) {
+      this.fnPost = _fnPost
+    }
   }
 }
 </script>
