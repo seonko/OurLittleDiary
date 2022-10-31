@@ -54,6 +54,7 @@ export default {
           const token = res.headers.authorization
           const payload = VueJwtDecode.decode(token.substr(7))
           this.$store.dispatch('setMemberId', payload.id)
+          this.$store.dispatch('setNickname', payload.nickname)
         })
         .catch((err) => {
           alert('로그인 실패')
