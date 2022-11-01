@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
 
 @Entity(name = "post")
 @Getter
@@ -38,10 +38,15 @@ public class Post {
 
     @Column(name = "content_create_date")
     @CreatedDate
-    private LocalDateTime contentCreateDate;
+    private String contentCreateDate;
 
     @Column(name = "reply_count", nullable = false)
     private int replyCount;
+
+    @PrePersist
+    public void onPrePersist() {
+        this.contentCreateDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
 
     @Builder
     public Post(Diary diary, String title, String content, Member member, int replyCount) {

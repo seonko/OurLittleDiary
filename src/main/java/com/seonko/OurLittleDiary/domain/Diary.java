@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity(name = "diary")
 @Getter
@@ -26,7 +27,12 @@ public class Diary {
 
     @Column(name = "diary_create_date")
     @CreatedDate
-    private LocalDateTime diaryCreateDate;
+    private String diaryCreateDate;
+
+    @PrePersist
+    public void onPrePersist() {
+        this.diaryCreateDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
 
     @Builder
     public Diary(String diaryName) {
