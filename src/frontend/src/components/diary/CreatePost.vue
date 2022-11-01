@@ -23,7 +23,18 @@ export default {
   },
   methods: {
     createPost () {
-
+      this.requestBody = {
+        title: this.title,
+        content: this.content,
+        diaryId: this.$store.state.diaryStore.diaryId
+      }
+      this.axios.post('/api/post/write', this.requestBody)
+        .then((response) => {
+          alert('일기가 저장되었습니다.')
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
 }

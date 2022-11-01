@@ -1,18 +1,32 @@
 package com.seonko.OurLittleDiary.dto;
 
+import com.seonko.OurLittleDiary.domain.Diary;
+import com.seonko.OurLittleDiary.domain.Member;
+import com.seonko.OurLittleDiary.domain.Post;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Data
 public class PostDTO {
 
     private Long id;
-    private Long diaryId;
+    private Diary diary;
     private String title;
     private String content;
-    private String writer;
+    private Member member;
     private LocalDateTime contentCreateDate;
-    private Long replyCount;
+    private int replyCount;
+
+    public Post toEntity() {
+        return Post.builder()
+                .diary(diary)
+                .title(title)
+                .content(content)
+                .member(member)
+                .replyCount(replyCount)
+                .build();
+    }
 
 }

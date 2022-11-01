@@ -1,5 +1,8 @@
 package com.seonko.OurLittleDiary.controller;
 
+import com.seonko.OurLittleDiary.config.auth.PrincipalDetails;
+import com.seonko.OurLittleDiary.dto.CreatePostDTO;
+import com.seonko.OurLittleDiary.dto.PostDTO;
 import com.seonko.OurLittleDiary.util.GsonUtil;
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.DiaryMember;
@@ -50,6 +53,12 @@ public class DiaryController {
             diaryList.add(diaryMember.getDiary());
         }
         return diaryList;
+    }
+
+    // 다이어리 글 작성
+    @PostMapping("/api/post/write")
+    public void createPost(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody CreatePostDTO createPostDTO) throws Exception {
+        diaryService.createPost(principalDetails, createPostDTO);
     }
 
 }
