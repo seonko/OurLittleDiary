@@ -2,8 +2,7 @@ import axios from 'axios'
 
 const tokenStore = ({
   state: {
-    atk: null,
-    rtk: null
+    atk: null
   },
   getters: {
     isLogin (state) {
