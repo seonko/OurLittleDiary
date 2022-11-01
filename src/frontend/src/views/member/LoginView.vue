@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import VueJwtDecode from 'vue-jwt-decode'
 export default {
   data () {
     return {
@@ -50,6 +51,10 @@ export default {
           this.$router.push('/diaryList')
           this.$store.dispatch('setToken', res.headers.authorization)
           this.$cookies.set('rtk', res.headers.refresh_token, { httpOnly: true })
+          const token = res.headers.authorization
+          const payload = VueJwtDecode.decode(token.substr(7))
+          this.$store.dispatch('setMemberId', payload.id)
+          this.$store.dispatch('setNickname', payload.nickname)
         })
         .catch((err) => {
           alert('로그인 실패')
