@@ -1,19 +1,19 @@
 <template>
-    <body class="text-center">
+  <body class="text-center">
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
       <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
-        <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
-          <DiaryCalendar/>
-          <DiaryPost/>
-        </div>
+        <DiaryCalendar/>
+        <DiaryPost/>
       </div>
+    </div>
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
       <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
-        <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
-          <DiaryPostList/>
-          <DiaryReply/>
-        </div>
+        <DiaryPostList/>
+        <DiaryReply/>
       </div>
-    </body>
-  </template>
+    </div>
+  </body>
+</template>
 
 <script>
 import DiaryCalendar from '@/components/diary/DiaryCalendar.vue'
@@ -22,15 +22,15 @@ import DiaryPostList from '@/components/diary/DiaryPostList.vue'
 import DiaryReply from '@/components/diary/DiaryReply.vue'
 
 export default {
+  data () {
+    return {
+    }
+  },
   components: {
     DiaryCalendar,
     DiaryPost,
     DiaryPostList,
     DiaryReply
-  },
-  data () {
-    return {
-    }
   },
   methods: {
   }

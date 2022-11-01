@@ -1,13 +1,20 @@
-// import Vue from 'vue'
 import Vuex from 'vuex'
 import tokenStore from './tokenStore.js'
-
-// Vue.use(Vuex)
+import memberStore from './memberStore.js'
+import diaryStore from './diaryStore.js'
+// import createPersistedState from 'vuex-persistedstate'
 
 const store = new Vuex.Store({
   modules: {
-    tokenStore: tokenStore
+    tokenStore: tokenStore,
+    memberStore: memberStore,
+    diaryStore: diaryStore
   }
+  // plugins: [
+  //   createPersistedState({
+  //     paths: ['memberStore', 'tokenStore']
+  //   })
+  // ]
 })
 
 export default store
