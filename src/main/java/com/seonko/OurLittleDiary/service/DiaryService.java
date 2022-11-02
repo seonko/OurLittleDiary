@@ -7,7 +7,6 @@ import com.seonko.OurLittleDiary.domain.Member;
 import com.seonko.OurLittleDiary.domain.Post;
 import com.seonko.OurLittleDiary.dto.CreatePostDTO;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
-import com.seonko.OurLittleDiary.dto.PostDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -19,5 +18,6 @@ public interface DiaryService {
     Long diaryMemberSave(Diary diary, Member member) throws Exception;
     List<DiaryMember> diaryMemberList(Long memberId) throws Exception;
     Post createPost(PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception;
+    List<Post> diaryPostList(Long diaryId, String targetDate) throws Exception;
 
 }

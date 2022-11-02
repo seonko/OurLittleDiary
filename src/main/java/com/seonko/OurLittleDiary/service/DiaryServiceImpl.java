@@ -79,4 +79,11 @@ public class DiaryServiceImpl implements DiaryService {
         return postRepository.save(postDTO.toEntity());
     }
 
+    // 다이어리 Post 리스트
+    @Override
+    public List<Post> diaryPostList(Long diaryId, String targetDate) throws Exception {
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow();
+        return postRepository.findByDiaryAndContentCreateDateContaining(diary, targetDate);
+    }
+
 }

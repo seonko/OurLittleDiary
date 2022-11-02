@@ -31,6 +31,7 @@ export default {
       this.axios.post('/api/post/write', this.requestBody)
         .then((response) => {
           alert('일기가 저장되었습니다.')
+          this.$store.dispatch('setFnPost', null)
         })
         .catch((error) => {
           console.log(error)
