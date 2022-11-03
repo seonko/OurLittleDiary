@@ -40,9 +40,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             e.printStackTrace();
         }
 
-//        System.out.println("JwtAuthenticationFilter : " + loginRequestDTO);
-
-        // UsernamePasswordAuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDTO.getUsername(),
@@ -62,17 +59,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // JWT 토큰 생성
         String accessToken = JWT.create()
                 .withSubject(principalDetails.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME))
                 .withClaim("id", principalDetails.getMember().getId())
                 .withClaim("username", principalDetails.getMember().getEmail())
                 .withClaim("nickname", principalDetails.getMember().getNickname())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .sign(Algorithm.HMAC512(JwtProperties.ACCESS_TOKEN_SECRET));
 
         String refreshToken = JWT.create()
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME))
+                .withClaim("id", principalDetails.getMember().getId())
+                .withClaim("username", principalDetails.getMember().getEmail())
+                .withClaim("nickname", principalDetails.getMember().getNickname())
+                .sign(Algorithm.HMAC512(JwtProperties.REFRESH_TOKEN_SECRET));
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
-        response.addHeader("Set-Cookie", "rtk=" + refreshToken + "; HttpOnly");
+        response.addHeader("Set-Cookie", "rtk=" + JwtProperties.TOKEN_PREFIX + refreshToken + "; HttpOnly");
     }
 }

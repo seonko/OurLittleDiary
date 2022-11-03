@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import diaryRoutes from './diaryRoutes'
 import memberRoutes from './memberRoutes'
+import store from '../store/index'
 
 const routes = [
   {
@@ -21,3 +22,20 @@ const router = createRouter({
 })
 
 export default router
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.isLogin) {
+      if (!document.cookie.indexOf('rtk')) {
+        alert('로그인이 필요한 요청입니다.')
+        next('/login')
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
