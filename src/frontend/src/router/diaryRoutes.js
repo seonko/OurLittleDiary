@@ -2,7 +2,8 @@ export default [
   {
     path: '/diaryList',
     name: 'diaryList',
-    component: () => import('../views/diary/DiaryListView.vue')
+    component: () => import('../views/diary/DiaryListView.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/diary/:id',

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../plugins/axios'
 
 const tokenStore = ({
   state: {
@@ -6,13 +6,12 @@ const tokenStore = ({
   },
   getters: {
     isLogin (state) {
-      return state.token != null
+      return state.atk != null
     }
   },
   mutations: {
     setToken (state, _token) {
       state.atk = _token
-      // 로그인 이후 모든 axios 요청 header에 토큰 넣는다
       axios.defaults.headers.common.Authorization = _token
     }
   },
