@@ -1,12 +1,17 @@
 package com.seonko.OurLittleDiary.service;
 
+import com.seonko.OurLittleDiary.config.auth.PrincipalDetails;
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.DiaryMember;
 import com.seonko.OurLittleDiary.domain.Member;
+import com.seonko.OurLittleDiary.domain.Post;
+import com.seonko.OurLittleDiary.dto.CreatePostDTO;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
 import com.seonko.OurLittleDiary.dto.DiaryMemberDTO;
+import com.seonko.OurLittleDiary.dto.PostDTO;
 import com.seonko.OurLittleDiary.repository.DiaryMemberRepository;
 import com.seonko.OurLittleDiary.repository.DiaryRepository;
+import com.seonko.OurLittleDiary.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +29,7 @@ public class DiaryServiceImpl implements DiaryService {
     private String uploadPath;
     private final DiaryRepository diaryRepository;
     private final DiaryMemberRepository diaryMemberRepository;
+    private final PostRepository postRepository;
 
     // 다이어리 생성
     @Override
@@ -62,10 +67,29 @@ public class DiaryServiceImpl implements DiaryService {
         return diaryMemberRepository.findByMemberId(memberId);
     }
 
-    // 다이어리 ID로 다이어리 조회
-//    @Override
-//    public Diary diaryFindById(Long diaryId) throws Exception {
-//        return diaryRepository.findById(diaryId);
-//    }
+    // 다이어리 글 작성
+    @Override
+    public Post createPost(PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception {
+        PostDTO postDTO = new PostDTO();
+        postDTO.setDiary(diaryRepository.findById(createPostDTO.getDiaryId()).orElseThrow());
+        postDTO.setMember(principalDetails.getMember());
+        postDTO.setTitle(createPostDTO.getTitle());
+        postDTO.setContent(createPostDTO.getContent());
+        postDTO.setReplyCount(0);
+        return postRepository.save(postDTO.toEntity());
+    }
+
+    // 다이어리 Post 리스트
+    @Override
+    public List<Post> diaryPostList(Long diaryId, String targetDate) throws Exception {
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow();
+        return postRepository.findByDiaryAndContentCreateDateContaining(diary, targetDate);
+    }
+
+    // 다이어리 글 보기
+    @Override
+    public Post readPost(Long postId) throws Exception {
+        return postRepository.findById(postId).orElseThrow();
+    }
 
 }

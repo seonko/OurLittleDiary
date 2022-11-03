@@ -1,7 +1,6 @@
 package com.seonko.OurLittleDiary.dto;
 
 import com.seonko.OurLittleDiary.domain.Diary;
-import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -23,11 +22,5 @@ public class DiaryDTO {
                 .build();
         return build;
     }
-
-//    @Builder DiaryDTO(Long id, String diaryName, LocalDateTime diaryCreateDate) {
-//        this.id = id;
-//        this.diaryName = diaryName;
-//        this.diaryCreateDate = diaryCreateDate;
-//    }
 
 }

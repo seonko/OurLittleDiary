@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 @Getter
@@ -41,14 +42,25 @@ public class Member {
 
     @Column(name = "create_date", nullable = false)
     @CreatedDate
-    private LocalDateTime createDate;
+    private String createDate;
 
     @Column(name = "last_access_date", nullable = false)
     @CreatedDate
-    private LocalDateTime lastAccessDate;
+    private String lastAccessDate;
 
     @Column(name = "searchable", nullable = false)
     private Boolean searchable;
+
+    @PrePersist
+    public void onPrePersist() {
+        this.createDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.lastAccessDate = this.createDate;
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+        this.lastAccessDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
 
     @Builder
     public Member(String email, String password, String nickname, Authority authority, Boolean searchable) {
