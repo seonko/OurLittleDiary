@@ -14,6 +14,7 @@ import com.seonko.OurLittleDiary.repository.DiaryRepository;
 import com.seonko.OurLittleDiary.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,7 +70,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     // 다이어리 글 작성
     @Override
-    public Post createPost(PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception {
+    public Post createPost(@AuthenticationPrincipal PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception {
         PostDTO postDTO = new PostDTO();
         postDTO.setDiary(diaryRepository.findById(createPostDTO.getDiaryId()).orElseThrow());
         postDTO.setMember(principalDetails.getMember());
