@@ -19,5 +19,6 @@ public interface DiaryService {
     List<DiaryMember> diaryMemberList(Long memberId) throws Exception;
     Post createPost(PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception;
     List<Post> diaryPostList(Long diaryId, String targetDate) throws Exception;
+    Post readPost(Long postId) throws Exception;
 
 }

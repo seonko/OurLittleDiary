@@ -67,4 +67,10 @@ public class DiaryController {
         return diaryService.diaryPostList(diaryId, targetDate);
     }
 
+    // 다이어리 글 보기
+    @GetMapping("/api/getPost")
+    public Post getPost(@RequestParam Long postId) throws Exception {
+        return diaryService.readPost(postId);
+    }
+
 }

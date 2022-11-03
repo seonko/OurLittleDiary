@@ -6,7 +6,7 @@
           <th style="width:50px;">번호</th>
           <th style="width:200px;">제목</th>
           <th style="width:80px;">글쓴이</th>
-          <th style="width:50px;">작성시간</th>
+          <th style="width:80px;">작성시간</th>
         </tr>
       </thead>
       <tbody v-if="postList.length">
@@ -14,7 +14,7 @@
           <td>{{ row.id }}</td>
           <td @click="fnPostRead(row.id)"><strong class="postTitle">{{ row.title }}</strong></td>
           <td>{{ row.member.nickname }}</td>
-          <td>12:34</td>
+          <td>{{ row.contentCreateDate.substr(11, 5) }}</td>
         </tr>
       </tbody>
       <tbody v-else>
@@ -53,7 +53,6 @@ export default {
         }
       })
         .then((response) => {
-          console.log(response.data)
           this.postList = response.data
         })
         .catch((error) => {
@@ -63,15 +62,29 @@ export default {
     fnPostWrite () {
       this.$store.dispatch('setFnPost', 'write')
     },
-    fnPostRead () {
-      this.$store.dispatch('setFnPost', 'read')
+    fnPostRead (postId) {
+      this.$store.dispatch('setFnPost', 'read' + postId)
     }
   },
   created () {
     this.getPostList()
+  },
+  computed: {
+    check_fnPost () {
+      this.getPostList()
+      return this.$store.getters.fnPost
+    }
+  },
+  watch: {
+    check_fnPost (val) {
+      this.fnPost = val
+    }
   }
 }
 </script>
 
 <style scoped>
+.postTitle {
+  cursor: pointer;
+}
 </style>

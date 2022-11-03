@@ -86,4 +86,10 @@ public class DiaryServiceImpl implements DiaryService {
         return postRepository.findByDiaryAndContentCreateDateContaining(diary, targetDate);
     }
 
+    // 다이어리 글 보기
+    @Override
+    public Post readPost(Long postId) throws Exception {
+        return postRepository.findById(postId).orElseThrow();
+    }
+
 }
