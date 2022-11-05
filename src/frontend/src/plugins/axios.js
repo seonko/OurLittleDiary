@@ -7,10 +7,12 @@ const instance = axios.create()
 instance.interceptors.response.use(
   (res) => {
     if (res.headers.authorization) {
-      store.dispatch('setToken', res.headers.authorization)
-    } else if (res.headers.get('LoginInvaildate')) {
-      alert('로그인 정보가 만료되었습니다.')
-      router.push('/login')
+      if (res.headers.authorization === 'Login Invalidate') {
+        alert('로그인 만료')
+        router.push('/login')
+      } else {
+        store.dispatch('setToken', res.headers.authorization)
+      }
     }
     return res
   },

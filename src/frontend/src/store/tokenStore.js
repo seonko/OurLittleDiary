@@ -1,17 +1,17 @@
-import axios from '../plugins/axios'
+import axios from '../plugins/axios.js'
 
 const tokenStore = ({
   state: {
-    atk: null
+    access_token: null
   },
   getters: {
     isLogin (state) {
-      return state.atk != null
+      return state.access_token != null
     }
   },
   mutations: {
     setToken (state, _token) {
-      state.atk = _token
+      state.access_token = _token
       axios.defaults.headers.common.Authorization = _token
     }
   },

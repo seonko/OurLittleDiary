@@ -51,6 +51,7 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/admin/**")
                 .access("hasRole('ROLE_ADMIN')")
+                .anyRequest().permitAll()
 
                 .and().build();
     }

@@ -49,8 +49,8 @@ export default {
         .then((res) => {
           alert('로그인 성공')
           this.$router.push('/diaryList')
-          this.$store.dispatch('setToken', res.headers.authorization)
           const token = res.headers.authorization
+          this.$store.dispatch('setToken', token)
           const payload = VueJwtDecode.decode(token.substr(7))
           this.$store.dispatch('setMemberId', payload.id)
           this.$store.dispatch('setNickname', payload.nickname)
