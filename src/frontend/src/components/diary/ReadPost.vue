@@ -5,7 +5,8 @@
       <p>{{nickname}}  |  {{postDate}}</p>
     </div>
     <div class="postContentArea">
-      {{ content }}
+      <p style="white-space: pre-line;">{{ content }}</p>
+      <!-- {{ content }} -->
     </div>
     <div>
       <button class="btn" @click="updatePost">수정</button>
@@ -67,6 +68,9 @@ export default {
     check_fnPost () {
       this.getPost()
       return this.$store.getters.fnPost
+    },
+    getContent () {
+      return this.content.split('\n').join('<br>')
     }
   },
   watch: {
