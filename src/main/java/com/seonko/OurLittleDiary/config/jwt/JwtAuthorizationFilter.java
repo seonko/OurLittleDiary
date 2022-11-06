@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Objects;
 
 // 인가
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
@@ -30,6 +31,35 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         this.memberRepository = memberRepository;
     }
 
+    // 액세스 토큰 재발급
+    protected String reIssueAccessToken(Member member) {
+        String accessToken = null;
+
+        accessToken = JWT.create()
+                .withSubject(member.getEmail())
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME))
+                .withClaim("id", member.getId())
+                .withClaim("username", member.getEmail())
+                .withClaim("nickname", member.getNickname())
+                .sign(Algorithm.HMAC512(JwtProperties.ACCESS_TOKEN_SECRET));
+        System.out.println("ACCESS 토큰 재발급");
+        return accessToken;
+    }
+
+    // 리프레시 토큰 재발급
+    protected String reIssueRefreshToken(Member member) {
+        String refreshToken = null;
+
+        refreshToken = JWT.create()
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME))
+                .withClaim("id", member.getId())
+                .withClaim("username", member.getEmail())
+                .withClaim("nickname", member.getNickname())
+                .sign(Algorithm.HMAC512(JwtProperties.REFRESH_TOKEN_SECRET));
+        System.out.println("REFRESH 토큰 재발급");
+        return refreshToken;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
@@ -37,84 +67,65 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String c = request.getHeader("Cookie");
         String[] cookies = null;
 
-        if (c != null) {
-            cookies = c.split("; ");
-        }
-
-        System.out.println("header " + header);
-        System.out.println("cookie " + cookies);
-        String rtk = null;
-        String username = null;
+        String refreshToken = null;
+        String accessToken = null;
+        String accessUsername = null;
+        String refreshUsername = null;
+        Boolean isAccessTokenValidate = true;
+        Boolean isRefreshTokenValidate = true;
         Member member = null;
 
-        if (header == null) {
-            if (cookies != null && cookies.length > 0) { // cookie 확인하여 refresh token 확인
-                for (String cookie : cookies) {
-                    String[] tmp = cookie.split("=");
-                    if (tmp[0].equals("rtk")) {
-                        rtk = tmp[1].replace(JwtProperties.TOKEN_PREFIX, "");
-                    }
-                }
-            }
-            System.out.println("rtk" + rtk);
-            if (rtk != null) { // 리프레시 토큰 있으면
-                // 액세스 토큰 재발급
-                username = JWT.require(Algorithm.HMAC512(JwtProperties.REFRESH_TOKEN_SECRET)).build().verify(rtk)
-                        .getClaim("username").asString();
-                member = memberRepository.findByEmail(username).orElse(null);
-                String accessToken = JWT.create()
-                        .withSubject(member.getEmail())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME))
-                        .withClaim("id", member.getId())
-                        .withClaim("username", member.getEmail())
-                        .withClaim("nickname", member.getNickname())
-                        .sign(Algorithm.HMAC512(JwtProperties.ACCESS_TOKEN_SECRET));
-                System.out.println("ACCESS 토큰 재발급");
-                response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
-            }
-            chain.doFilter(request, response);
-            return;
-        }
-
-        if (!header.startsWith(JwtProperties.TOKEN_PREFIX)) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
-
-
-
-        // 토큰 검증
+        // 액세스 토큰 검증
         try {
-            username = JWT.require(Algorithm.HMAC512(JwtProperties.ACCESS_TOKEN_SECRET)).build().verify(token)
-                    .getClaim("username").asString();
-        } catch (TokenExpiredException e) { // access 토큰 기한 만료!
-            System.out.println("토큰 기한 만료");
-            if (cookies != null && cookies.length > 0) { // cookie 확인하여 refresh token 확인
+            if (header != null) {
+                accessToken = header.replace(JwtProperties.TOKEN_PREFIX, "");
+                accessUsername = JWT.require(Algorithm.HMAC512(JwtProperties.ACCESS_TOKEN_SECRET)).build().verify(accessToken)
+                        .getClaim("username").asString();
+            } else {
+                chain.doFilter(request, response);
+                return;
+            }
+        } catch (Exception e) {
+            isAccessTokenValidate = false;
+        }
+
+        // 리프레시 토큰 검증
+        try {
+            if (c != null) {
+                cookies = c.split("; ");
                 for (String cookie : cookies) {
                     String[] tmp = cookie.split("=");
-                    if (tmp[0].equals("rtk")) {
-                        rtk = tmp[1].replace(JwtProperties.TOKEN_PREFIX, "");
+                    if (tmp[0].equals("refresh_token")) {
+                        refreshToken = tmp[1].replace(JwtProperties.TOKEN_PREFIX, "");
                     }
+                    refreshUsername = JWT.require(Algorithm.HMAC512(JwtProperties.REFRESH_TOKEN_SECRET)).build().verify(refreshToken)
+                            .getClaim("username").asString();
                 }
+            } else{
+                chain.doFilter(request, response);
+                return;
             }
-            System.out.println("rtk" + rtk);
-            if (rtk != null) { // 리프레시 토큰 있으면
-                // 액세스 토큰 재발급
-                username = JWT.require(Algorithm.HMAC512(JwtProperties.REFRESH_TOKEN_SECRET)).build().verify(rtk)
-                        .getClaim("username").asString();
-                member = memberRepository.findByEmail(username).orElse(null);
-                String accessToken = JWT.create()
-                        .withSubject(member.getEmail())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME))
-                        .withClaim("id", member.getId())
-                        .withClaim("username", member.getEmail())
-                        .withClaim("nickname", member.getNickname())
-                        .sign(Algorithm.HMAC512(JwtProperties.ACCESS_TOKEN_SECRET));
-                System.out.println("ACCESS 토큰 재발급");
+        } catch (Exception e) {
+            isRefreshTokenValidate = false;
+        }
+
+        if (isRefreshTokenValidate && isAccessTokenValidate) {
+            member = memberRepository.findByEmail(accessUsername).orElse(null);
+        } else if (!isAccessTokenValidate) {
+            if (isRefreshTokenValidate) {
+                member = memberRepository.findByEmail(refreshUsername).orElse(null);
+                accessToken = reIssueAccessToken(member);
                 response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
+            } else {
+                // 재로그인 필요
+                response.addHeader(JwtProperties.HEADER_STRING, "Login Invalidate");
+                chain.doFilter(request, response);
+                return;
             }
+        } else {
+            member = memberRepository.findByEmail(accessUsername).orElse(null);
+            refreshToken = reIssueRefreshToken(member);
+            response.addHeader("Set-Cookie", "refresh_token=" + JwtProperties.TOKEN_PREFIX + refreshToken + "; HttpOnly");
         }
 
         if (member != null) {

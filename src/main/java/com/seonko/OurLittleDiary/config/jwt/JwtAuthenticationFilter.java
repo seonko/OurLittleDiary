@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seonko.OurLittleDiary.config.auth.PrincipalDetails;
 import com.seonko.OurLittleDiary.dto.LoginRequestDTO;
-import com.seonko.OurLittleDiary.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -73,6 +72,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(Algorithm.HMAC512(JwtProperties.REFRESH_TOKEN_SECRET));
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
-        response.addHeader("Set-Cookie", "rtk=" + JwtProperties.TOKEN_PREFIX + refreshToken + "; HttpOnly");
+        response.addHeader("Set-Cookie", "refresh_token=" + JwtProperties.TOKEN_PREFIX + refreshToken + "; HttpOnly");
     }
 }
