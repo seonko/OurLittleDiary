@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
+@DynamicUpdate
 public class Post {
 
     @Id
@@ -40,7 +42,7 @@ public class Post {
     @CreatedDate
     private String contentCreateDate;
 
-    @Column(name = "reply_count", nullable = false)
+    @Column(name = "reply_count")
     private int replyCount;
 
     @PrePersist
@@ -49,12 +51,14 @@ public class Post {
     }
 
     @Builder
-    public Post(Diary diary, String title, String content, Member member, int replyCount) {
+    public Post(Long id, Diary diary, String title, String content, Member member, int replyCount, String contentCreateDate) {
+        this.id = id;
         this.diary = diary;
         this.title = title;
         this.content = content;
         this.member = member;
         this.replyCount = replyCount;
+        this.contentCreateDate = contentCreateDate;
     }
 
 }
