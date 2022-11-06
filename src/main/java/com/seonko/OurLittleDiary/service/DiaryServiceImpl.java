@@ -8,7 +8,6 @@ import com.seonko.OurLittleDiary.domain.Post;
 import com.seonko.OurLittleDiary.dto.CreatePostDTO;
 import com.seonko.OurLittleDiary.dto.DiaryDTO;
 import com.seonko.OurLittleDiary.dto.DiaryMemberDTO;
-import com.seonko.OurLittleDiary.dto.PostDTO;
 import com.seonko.OurLittleDiary.repository.DiaryMemberRepository;
 import com.seonko.OurLittleDiary.repository.DiaryRepository;
 import com.seonko.OurLittleDiary.repository.PostRepository;
@@ -68,16 +67,18 @@ public class DiaryServiceImpl implements DiaryService {
         return diaryMemberRepository.findByMemberId(memberId);
     }
 
-    // 다이어리 글 작성
+    // 다이어리 글 작성 및 수정
+    @Transactional
     @Override
-    public Post createPost(@AuthenticationPrincipal PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception {
-        PostDTO postDTO = new PostDTO();
-        postDTO.setDiary(diaryRepository.findById(createPostDTO.getDiaryId()).orElseThrow());
-        postDTO.setMember(principalDetails.getMember());
-        postDTO.setTitle(createPostDTO.getTitle());
-        postDTO.setContent(createPostDTO.getContent());
-        postDTO.setReplyCount(0);
-        return postRepository.save(postDTO.toEntity());
+    public void createPost(@AuthenticationPrincipal PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception {
+        postRepository.save(Post.builder()
+                        .id(createPostDTO.getPostId())
+                        .diary(diaryRepository.findById(createPostDTO.getDiaryId()).orElseThrow())
+                        .member(principalDetails.getMember())
+                        .title(createPostDTO.getTitle())
+                        .content(createPostDTO.getContent())
+                        .contentCreateDate(createPostDTO.getContentCreateDate())
+                .build());
     }
 
     // 다이어리 Post 리스트
@@ -91,6 +92,12 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public Post readPost(Long postId) throws Exception {
         return postRepository.findById(postId).orElseThrow();
+    }
+
+    // 다이어리 글 삭제
+    @Override
+    public void deletePost(Long postId) throws Exception {
+        postRepository.deleteById(postId);
     }
 
 }
