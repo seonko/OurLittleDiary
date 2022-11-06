@@ -3,6 +3,7 @@ package com.seonko.OurLittleDiary.controller;
 import com.seonko.OurLittleDiary.config.auth.PrincipalDetails;
 import com.seonko.OurLittleDiary.domain.Post;
 import com.seonko.OurLittleDiary.dto.CreatePostDTO;
+import com.seonko.OurLittleDiary.dto.PostDTO;
 import com.seonko.OurLittleDiary.util.GsonUtil;
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.DiaryMember;
@@ -55,7 +56,7 @@ public class DiaryController {
         return diaryList;
     }
 
-    // 다이어리 글 작성
+    // 다이어리 글 작성 및 수정
     @PostMapping("/api/post/write")
     public void createPost(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody CreatePostDTO createPostDTO) throws Exception {
         diaryService.createPost(principalDetails, createPostDTO);
@@ -71,6 +72,12 @@ public class DiaryController {
     @GetMapping("/api/getPost")
     public Post getPost(@RequestParam Long postId) throws Exception {
         return diaryService.readPost(postId);
+    }
+
+    // 다이어리 글 삭제
+    @DeleteMapping("/api/deletePost/{postId}")
+    public void deletePost(@PathVariable Long postId) throws Exception {
+        diaryService.deletePost(postId);
     }
 
 }

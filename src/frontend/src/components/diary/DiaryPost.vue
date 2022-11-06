@@ -2,11 +2,13 @@
   <div v-if="fnPost === null"></div>
   <CreatePost v-else-if="fnPost === 'write'" />
   <ReadPost v-else-if="fnPost.substr(0, 4) === 'read'" />
+  <UpdatePost v-else-if="fnPost.substr(0, 4) === 'upda'" />
 </template>
 
 <script>
 import CreatePost from '@/components/diary/CreatePost'
 import ReadPost from '@/components/diary/ReadPost'
+import UpdatePost from '@/components/diary/UpdatePost'
 
 export default {
   data () {
@@ -16,7 +18,8 @@ export default {
   },
   components: {
     CreatePost,
-    ReadPost
+    ReadPost,
+    UpdatePost
   },
   methods: {
   },

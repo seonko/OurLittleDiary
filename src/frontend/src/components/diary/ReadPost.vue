@@ -5,7 +5,11 @@
       <p>{{nickname}}  |  {{postDate}}</p>
     </div>
     <div class="postContentArea">
-      {{ content }}
+      <p style="white-space: pre-line;">{{ content }}</p>
+    </div>
+    <div>
+      <button class="btn" @click="updatePost">수정</button>
+      <button class="btn" @click="deletePost">삭제</button>
     </div>
   </div>
 </template>
@@ -14,28 +18,46 @@
 export default {
   data () {
     return {
+      postId: parseInt(this.$store.state.diaryStore.fnPost.substr(4)),
       title: '',
       content: '',
       nickname: '',
-      postDate: ''
+      postDate: '',
+      writerId: ''
     }
   },
   methods: {
     getPost () {
       this.axios.get('/api/getPost', {
         params: {
-          postId: parseInt(this.$store.state.diaryStore.fnPost.substr(4, 1))
+          postId: parseInt(this.$store.state.diaryStore.fnPost.substr(4))
         }
       })
         .then((response) => {
           this.title = response.data.title
           this.content = response.data.content
           this.nickname = response.data.member.nickname
-          this.postDate = response.data.contentCreateDate.substr(0, 10)
+          this.postDate = response.data.contentCreateDate.substr(0, 16)
+          this.writerId = response.data.member.id
         })
         .catch((error) => {
           console.log(error)
         })
+    },
+    updatePost () {
+      this.$store.dispatch('setFnPost', 'update' + parseInt(this.$store.state.diaryStore.fnPost.substr(4)))
+    },
+    deletePost () {
+      if (confirm('일기를 삭제하시겠습니까?')) {
+        this.axios.delete('/api/deletePost/' + parseInt(this.$store.state.diaryStore.fnPost.substr(4)))
+          .then((response) => {
+            alert('일기가 삭제되었습니다.')
+            this.$store.dispatch('setFnPost', null)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     }
   },
   created () {
@@ -45,6 +67,9 @@ export default {
     check_fnPost () {
       this.getPost()
       return this.$store.getters.fnPost
+    },
+    getContent () {
+      return this.content.split('\n').join('<br>')
     }
   },
   watch: {
