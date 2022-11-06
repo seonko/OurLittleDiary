@@ -6,7 +6,6 @@
     </div>
     <div class="postContentArea">
       <p style="white-space: pre-line;">{{ content }}</p>
-      <!-- {{ content }} -->
     </div>
     <div>
       <button class="btn" @click="updatePost">수정</button>
