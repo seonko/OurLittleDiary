@@ -16,20 +16,22 @@ axiosInstance.interceptors.request.use(
   }
 )
 
-// axiosInstance.interceptors.response.use(
-//   function (res) {
-//     if (res.headers.authorization) {
-//       if (res.headers.authorization === 'Login Invalidate') {
-//         alert('로그인 만료')
-//         router.push('/login')
-//       } else {
-//         store.dispatch('setToken', res.headers.authorization)
-//       }
-//     }
-//   },
-//   function (err) {
-//     return axiosInstance.request(err.config)
-//   }
-// )
+axiosInstance.interceptors.response.use(
+  function (res) {
+    // if (res.headers.authorization) {
+    //   if (res.headers.authorization === 'Login Invalidate') {
+    //     alert('로그인 만료')
+    //     router.push('/login')
+    //   } else {
+    //     store.dispatch('setToken', res.headers.authorization)
+    //   }
+    // }
+    return res
+  },
+  function (err) {
+    store.dispatch('setToken', err.response.headers.authorization)
+    return axiosInstance.request(err.config)
+  }
+)
 
 export default axiosInstance
