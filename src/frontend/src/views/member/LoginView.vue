@@ -50,6 +50,7 @@ export default {
           alert('로그인 성공')
           this.$router.push('/diaryList')
           const token = res.headers.authorization
+          console.log(token)
           this.$store.dispatch('setToken', token)
           const payload = VueJwtDecode.decode(token.substr(7))
           this.$store.dispatch('setMemberId', payload.id)

@@ -1,5 +1,3 @@
-import axios from '../plugins/axios.js'
-
 const tokenStore = ({
   state: {
     access_token: null
@@ -7,12 +5,14 @@ const tokenStore = ({
   getters: {
     isLogin (state) {
       return state.access_token != null
+    },
+    getToken (state) {
+      return state.access_token
     }
   },
   mutations: {
     setToken (state, _token) {
       state.access_token = _token
-      axios.defaults.headers.common.Authorization = _token
     }
   },
   actions: {
