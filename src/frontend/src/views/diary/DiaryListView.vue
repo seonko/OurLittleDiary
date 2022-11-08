@@ -6,8 +6,7 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
           <div class="col" v-for="(row, idx) in diaryList" :key="idx">
             <div class="card" @click="goToDiary(row.id)">
-              <img class="card-img-top" :src="'file:///C:/seoNko/OurLittleDiary/src/main/webapp/resources/images/diary/' + row.id + '.png'">
-              <!-- <img class="card-img-top" :src="require('@/assets/common/noImage.png')"> -->
+              <img class="card-img-top" :src="'/upload/images/diary/' + row.id + '.png'">
               <div class="card-body">
                 <h5 class="card-title">{{ row.diaryName }}</h5>
                 <!-- <p class="card-text">Card Content</p> -->
@@ -63,6 +62,7 @@ export default {
       this.modalVal = true
     },
     modalClose () {
+      this.getDiaryList()
       this.modalVal = false
     },
     goToDiary (diaryId) {
