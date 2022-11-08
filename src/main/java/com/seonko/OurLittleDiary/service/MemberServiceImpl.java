@@ -37,6 +37,6 @@ public class MemberServiceImpl implements MemberService{
     // 다이어리 참여멤버 검색
     @Override
     public List<Member> memberSearch(String keyword) {
-        return memberRepository.findByNicknameContaining(keyword);
+        return memberRepository.findByNicknameContainingAndSearchableIsTrue(keyword);
     }
 }

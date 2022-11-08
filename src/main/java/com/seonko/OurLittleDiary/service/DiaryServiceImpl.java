@@ -43,9 +43,9 @@ public class DiaryServiceImpl implements DiaryService {
     public void saveThumbnail(Diary diary, MultipartFile mFile) {
         String thumbnail = diary.getId().toString();
         try {
-            File file = new File(uploadPath + "diary/" + thumbnail);
+            File file = new File(uploadPath + "images/diary/" + thumbnail);
             file.delete();
-            mFile.transferTo(new File(uploadPath + "diary/" + thumbnail +".png"));
+            mFile.transferTo(new File(uploadPath + "images/diary/" + thumbnail +".png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
