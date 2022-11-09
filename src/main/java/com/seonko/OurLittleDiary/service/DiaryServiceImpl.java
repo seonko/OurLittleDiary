@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -61,10 +63,22 @@ public class DiaryServiceImpl implements DiaryService {
         return diaryMemberRepository.save(diaryMemberDTO.toEntity()).getId();
     }
 
-    // 다이어리 멤버 리스트
+    // 다이어리 리스트
     @Override
-    public List<DiaryMember> diaryMemberList(Long memberId) throws Exception {
-        return diaryMemberRepository.findByMemberId(memberId);
+    public HashMap<String, Object> diaryList(Long memberId) throws Exception {
+        HashMap<String, Object> result = new HashMap<>();
+        List<DiaryMember> diaryMemberList = diaryMemberRepository.findByMemberId(memberId);
+        List<Diary> diaryList = new ArrayList<>();
+        for (DiaryMember diaryMember : diaryMemberList) {
+            diaryList.add(diaryMember.getDiary());
+        }
+        result.put("diaryList", diaryList);
+        List<List> partMemberList = new ArrayList<>();
+        for (Diary diary : diaryList) {
+            partMemberList.add(diaryMemberRepository.findByDiaryId(diary.getId()));
+        }
+        result.put("partMemberList", partMemberList);
+        return result;
     }
 
     // 다이어리 글 작성 및 수정
