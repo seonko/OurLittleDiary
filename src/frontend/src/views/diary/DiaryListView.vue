@@ -9,8 +9,11 @@
               <img class="card-img-top" :src="'/upload/images/diary/' + row.id + '.png'">
               <div class="card-body">
                 <h5 class="card-title">{{ row.diaryName }}</h5>
-                <!-- <p class="card-text">Card Content</p> -->
-                <!-- <a href="#" class="btn btn-primary">Link</a> -->
+                <div v-for="(row2, idx2) in partMemberList" :key="idx2">
+                  <div v-if="idx === idx2">
+                    <p v-for="(row3, idx3) in row2" :key="idx3">{{ row3.member.nickname }}</p>
+                  </div>
+                </div>
                 <small class="text-muted">{{ row.diaryCreateDate.substring(0, 10) }}</small>
               </div>
             </div>
@@ -35,7 +38,8 @@ export default {
     return {
       modalVal: false,
       memberId: 0,
-      diaryList: []
+      diaryList: [],
+      partMemberList: []
     }
   },
   components: {
@@ -52,7 +56,8 @@ export default {
         }
       })
         .then((response) => {
-          this.diaryList = response.data
+          this.diaryList = response.data.diaryList
+          this.partMemberList = response.data.partMemberList
         })
         .catch((error) => {
           console.log(error)

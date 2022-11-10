@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface MemberService{
     Long save(MemberDTO memberDTO);
-    List<Member> memberSearch(String keyword);
+    List<String> memberNicknameSearch(String keyword);
+    Member getMemberByNickname(String nickname);
 }
