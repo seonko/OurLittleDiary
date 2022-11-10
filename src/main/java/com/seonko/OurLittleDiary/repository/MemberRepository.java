@@ -11,4 +11,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // 다이어리 참여멤버 검색
     List<Member> findByNicknameContainingAndSearchableIsTrue(String keyword);
     Optional<Member> findById(Long id);
+    Member findByNickname(String nickname);
 }

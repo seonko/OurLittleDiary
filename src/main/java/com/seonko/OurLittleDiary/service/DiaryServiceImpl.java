@@ -36,7 +36,9 @@ public class DiaryServiceImpl implements DiaryService {
     // 다이어리 생성
     @Override
     @Transactional
-    public Diary createDiary(DiaryDTO diaryDTO) throws Exception {
+    public Diary createDiary(String diaryName) throws Exception {
+        DiaryDTO diaryDTO = new DiaryDTO();
+        diaryDTO.setDiaryName(diaryName);
         return diaryRepository.save(diaryDTO.toEntity());
     }
 

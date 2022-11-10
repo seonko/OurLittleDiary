@@ -7,7 +7,8 @@
       </div>
       <div v-if="addedMemberList.length">
         <ul v-for="(row, idx) in addedMemberList" :key="idx">
-          <button class="btn-nickname btn-info"><span>{{ row.nickname }}</span></button>
+          <button class="btn-nickname btn-info" v-if="idx === 0"><span style="font-weight: bold">{{ row }}</span></button>
+          <button class="btn-nickname btn-info" v-else><span @click="delAddedMember(idx)">{{ row }}</span></button>
         </ul>
       </div>
       <div>
@@ -15,8 +16,9 @@
         <input type="text" v-model="keyword" @keyup="memberSearch">
       </div>
       <div class="diary-member-container" v-if="searchedMemberList.length">
-        <ul class="diary-member-list" v-for="(row, idx) in searchedMemberList" :key="idx" @click="addMember(row)">
-          {{ row.nickname }}
+        <ul class="diary-member-list" v-for="(row2, idx2) in searchedMemberList" :key="idx2">
+          <span v-if="addedMemberList.indexOf(row2) > -1" style="font-weight: bold">{{ row2 }}</span>
+          <span v-else @click="addMember(row2)">{{ row2 }}</span>
         </ul>
       </div>
       <div>
@@ -47,7 +49,7 @@ export default {
       keyword: '',
       thumbnail: '',
       searchedMemberList: [],
-      addedMemberList: [],
+      addedMemberList: [this.$store.state.memberStore.nickname],
       mFile: null
     }
   },
@@ -96,20 +98,16 @@ export default {
       })
         .then((response) => {
           this.searchedMemberList = response.data
-          console.log(response.data)
         })
         .catch((error) => {
           console.log(error)
         })
     },
-    addMember (row, event) {
-      // if (this.addedMemberList.indexOf(row) < 0) {
-      //   event.preventDefault()
-      // } else {
-      //   this.addedMemberList.push(row)
-      // }
+    addMember (row) {
       this.addedMemberList.push(row)
-      console.log(this.addedMemberList)
+    },
+    delAddedMember (idx) {
+      this.addedMemberList.splice(idx, 1)
     }
   }
 }

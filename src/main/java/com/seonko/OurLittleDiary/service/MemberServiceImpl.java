@@ -5,15 +5,12 @@ import com.seonko.OurLittleDiary.dto.MemberDTO;
 import com.seonko.OurLittleDiary.repository.MemberRepository;
 import com.seonko.OurLittleDiary.type.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -36,7 +33,18 @@ public class MemberServiceImpl implements MemberService{
 
     // 다이어리 참여멤버 검색
     @Override
-    public List<Member> memberSearch(String keyword) {
-        return memberRepository.findByNicknameContainingAndSearchableIsTrue(keyword);
+    public List<String> memberNicknameSearch(String keyword) {
+        List<Member> memberList = memberRepository.findByNicknameContainingAndSearchableIsTrue(keyword);
+        List<String> nicknameList = new ArrayList<>();
+        for (Member member : memberList) {
+            nicknameList.add(member.getNickname());
+        }
+        return nicknameList;
+    }
+
+    // nickname으로 멤버 찾기
+    @Override
+    public Member getMemberByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
     }
 }

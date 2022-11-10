@@ -5,7 +5,6 @@ import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.Member;
 import com.seonko.OurLittleDiary.domain.Post;
 import com.seonko.OurLittleDiary.dto.CreatePostDTO;
-import com.seonko.OurLittleDiary.dto.DiaryDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public interface DiaryService {
 
-    Diary createDiary(DiaryDTO diaryDTO) throws Exception;
+    Diary createDiary(String diaryName) throws Exception;
     void saveThumbnail(Diary diary, MultipartFile mFile);
     Long diaryMemberSave(Diary diary, Member member) throws Exception;
     HashMap<String, Object> diaryList(Long memberId) throws Exception;

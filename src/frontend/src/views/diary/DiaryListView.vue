@@ -58,8 +58,6 @@ export default {
         .then((response) => {
           this.diaryList = response.data.diaryList
           this.partMemberList = response.data.partMemberList
-          console.log(this.diaryList)
-          console.log(this.partMemberList)
         })
         .catch((error) => {
           console.log(error)
