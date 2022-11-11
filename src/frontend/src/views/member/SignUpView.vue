@@ -54,10 +54,18 @@ export default {
       passwordForChecking: '',
       nickname: '',
       emailDuplicated: false,
-      searchable: true
+      searchable: true,
+      emailCheckCode: ''
     }
   },
   methods: {
+    sendEmail (email) {
+      this.axios.get('/api/sendEmail/' + email)
+        .then((res) => {
+          alert('확인 코드를 전송하였습니다.')
+          this.emailCheckCode = res.data
+        })
+    },
     checkEmailDuplicate () {
       this.axios.get('/api/checkEmailDuplicate/' + this.email)
         .then((res) => {
@@ -65,7 +73,7 @@ export default {
           if (res.data) {
             alert('해당 이메일로 가입된 계정이 이미 존재합니다.')
           } else {
-            alert('확인 메일 전송')
+            this.sendEmail(this.email)
           }
         })
     },
