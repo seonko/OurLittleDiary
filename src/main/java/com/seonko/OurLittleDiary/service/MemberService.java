@@ -10,4 +10,5 @@ public interface MemberService{
     Long save(MemberDTO memberDTO);
     List<String> memberNicknameSearch(String keyword);
     Member getMemberByNickname(String nickname);
+    Boolean checkEmailDuplicate(String email);
 }

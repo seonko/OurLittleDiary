@@ -17,4 +17,10 @@ public class MemberController {
     public Long insertMember(@RequestBody MemberDTO memberDTO) throws Exception {
         return memberService.save(memberDTO);
     }
+
+    // 아이디 중복 체크
+    @GetMapping("/api/checkEmailDuplicate/{email}")
+    public Boolean checkEmailDuplicate(@PathVariable String email) {
+        return memberService.checkEmailDuplicate(email);
+    }
 }
