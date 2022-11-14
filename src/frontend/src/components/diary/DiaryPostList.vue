@@ -35,21 +35,15 @@ export default {
     return {
       diaryId: this.$store.state.diaryStore.diaryId,
       postList: [],
-      targetYear: new Date().getFullYear(),
-      targetMonth: new Date().getMonth() + 1,
-      targetDay: new Date().getDate()
+      postDay: this.$store.state.diaryStore.postDay
     }
   },
   methods: {
     getPostList () {
-      let targetDay = this.targetDay
-      if (targetDay < 10) {
-        targetDay = '0' + targetDay
-      }
       this.axios.get('/api/postList', {
         params: {
           diaryId: this.diaryId,
-          targetDate: this.targetYear + '-' + this.targetMonth + '-' + targetDay
+          postDay: this.postDay
         }
       })
         .then((response) => {
@@ -73,11 +67,18 @@ export default {
     check_fnPost () {
       this.getPostList()
       return this.$store.getters.fnPost
+    },
+    check_postDay () {
+      this.getPostList()
+      return this.$store.getters.postDay
     }
   },
   watch: {
     check_fnPost (val) {
       this.fnPost = val
+    },
+    check_postDay (val) {
+      this.postDay = val
     }
   }
 }

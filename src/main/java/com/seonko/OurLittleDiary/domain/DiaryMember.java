@@ -29,9 +29,10 @@ public class DiaryMember {
     private String role;
 
     @Builder
-    public DiaryMember(Diary diary, Member member) {
+    public DiaryMember(Diary diary, Member member, String role) {
         this.diary = diary;
         this.member = member;
+        this.role = role;
     }
 
 }

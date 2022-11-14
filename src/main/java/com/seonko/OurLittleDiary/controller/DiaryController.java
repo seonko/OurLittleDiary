@@ -30,14 +30,20 @@ public class DiaryController {
 
     // 다이어리 생성
     @PostMapping("/api/createDiary")
-    public void createDiary(@RequestParam String diaryName, @RequestParam MultipartFile mFile, @RequestParam String addedMemberList) throws Exception {
+    public void createDiary(@AuthenticationPrincipal PrincipalDetails principalDetails ,@RequestParam String diaryName, @RequestParam MultipartFile mFile, @RequestParam String addedMemberList) throws Exception {
         Diary diary = diaryService.createDiary(diaryName);
         diaryService.saveThumbnail(diary, mFile);
 
         List<String> nicknameList = new GsonUtil().mapFromJsonArray(String.valueOf(addedMemberList), String.class);
         for (String nickname : nicknameList) {
+            String role;
             Member member = memberService.getMemberByNickname(nickname);
-            diaryService.diaryMemberSave(diary, member);
+            if (principalDetails.getMember().getId() == member.getId()) {
+                role = "OWNER";
+            } else {
+                role = "MEMBER";
+            }
+            diaryService.diaryMemberSave(diary, member, role);
         }
     }
 
@@ -55,8 +61,8 @@ public class DiaryController {
 
     // 다이어리 Post 리스트
     @GetMapping("/api/postList")
-    public List<Post> postList(@RequestParam Long diaryId, @RequestParam String targetDate) throws Exception {
-        return diaryService.diaryPostList(diaryId, targetDate);
+    public List<Post> postList(@RequestParam Long diaryId, @RequestParam String postDay) throws Exception {
+        return diaryService.diaryPostList(diaryId, postDay);
     }
 
     // 다이어리 글 보기

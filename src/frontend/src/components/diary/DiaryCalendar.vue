@@ -3,23 +3,23 @@
     <div class="bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
       <div class="cal">
         <h2>
-          <router-link to="#" v-on:click="onClickPrev(currentMonth)">◀</router-link>
+          <router-link to="#" @click="onClickPrev(currentMonth)">◀</router-link>
           {{currentYear}}년 {{currentMonth}}월
-          <router-link to="#" v-on:click="onClickNext(currentMonth)">▶</router-link>
+          <router-link to="#" @click="onClickNext(currentMonth)">▶</router-link>
         </h2>
         <table class="table">
             <thead>
               <tr>
-                <td v-for="(weekName, index) in weekNames" v-bind:key="index">
+                <td v-for="(weekName, idx) in weekNames" v-bind:key="idx">
                   {{weekName}}
                 </td>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(row, index) in currentCalendarMatrix" :key="index">
-                <td class="day" v-for="(day, index2) in row" :key="index2" style="padding:20px;">
+              <tr v-for="(row, idx) in currentCalendarMatrix" :key="idx">
+                <td class="day" v-for="(day, idx2) in row" :key="idx2" @click="onClickDay(currentYear, currentMonth, day)" style="padding:20px;">
                   <div>
-                    <span v-if="isToday(currentYear, currentMonth, day)" class="rounded">
+                    <span v-if="isToday(currentYear, currentMonth, day)" class="today">
                       {{day}}
                     </span>
                     <span v-else>
@@ -147,6 +147,16 @@ export default {
     isToday (year, month, day) {
       const date = new Date()
       return year === date.getFullYear() && month === date.getMonth() + 1 && day === date.getDate()
+    },
+    onClickDay (year, month, day) {
+      if (month < 10) {
+        month = '0' + month
+      }
+      if (day < 10) {
+        day = '0' + day
+      }
+      this.$store.dispatch('setPostDay', year + '-' + month + '-' + day)
+      this.$store.dispatch('setFnPost', null)
     }
   }
 }
@@ -159,5 +169,13 @@ a {
 .day:hover {
   cursor: pointer;
   background-color: rgb(151, 148, 148);
+}
+.today {
+  -moz-border-radius:15px 15px 15px 15px;
+  border-radius:15px 15px 15px 15px;
+  border:solid 1px #ffffff;
+  background-color:#2b6bd1;
+  padding:10px;
+  color:#ffffff;
 }
 </style>

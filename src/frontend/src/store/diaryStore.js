@@ -1,7 +1,8 @@
 const diaryStore = ({
   state: {
     diaryId: null,
-    fnPost: null
+    fnPost: null,
+    postDay: null
   },
   getters: {
     diaryId (state) {
@@ -9,6 +10,9 @@ const diaryStore = ({
     },
     fnPost (state) {
       return state.fnPost
+    },
+    postDay (state) {
+      return state.postDay
     }
   },
   mutations: {
@@ -17,6 +21,9 @@ const diaryStore = ({
     },
     setFnPost (state, _fnPost) {
       state.fnPost = _fnPost
+    },
+    setPostDay (state, _postDay) {
+      state.postDay = _postDay
     }
   },
   actions: {
@@ -25,6 +32,9 @@ const diaryStore = ({
     },
     setFnPost: ({ commit }, _fnPost) => {
       commit('setFnPost', _fnPost)
+    },
+    setPostDay: ({ commit }, _postDay) => {
+      commit('setPostDay', _postDay)
     }
   }
 })
