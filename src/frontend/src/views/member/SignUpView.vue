@@ -8,7 +8,7 @@
         <label for="email" class="">Email address</label>
       </div>
       <br>
-      <!-- <button type="button" class="btn btn-dark" @click="sendMail">인증메일보내기</button><br> -->
+      <button type="button" class="btn btn-dark" @click="checkEmailDuplicate">인증메일보내기</button><br>
       <div class="form-floating">
         <br>
         <input type="text" class="form-control" id="password" v-model="password" placeholder="Password" required>
@@ -49,23 +49,42 @@ export default {
   name: 'SignUpView',
   data () {
     return {
-      requestBody: {},
       email: '',
       password: '',
       passwordForChecking: '',
       nickname: '',
-      searchable: true
+      emailDuplicated: false,
+      searchable: true,
+      emailCheckCode: ''
     }
   },
   methods: {
+    sendEmail (email) {
+      this.axios.get('/api/sendEmail/' + email)
+        .then((res) => {
+          alert('확인 코드를 전송하였습니다.')
+          this.emailCheckCode = res.data
+        })
+    },
+    checkEmailDuplicate () {
+      this.axios.get('/api/checkEmailDuplicate/' + this.email)
+        .then((res) => {
+          this.emailDuplicated = res.data
+          if (res.data) {
+            alert('해당 이메일로 가입된 계정이 이미 존재합니다.')
+          } else {
+            this.sendEmail(this.email)
+          }
+        })
+    },
     signUp (event) {
-      this.reqeustBody = {
+      const requestBody = {
         email: this.email,
         password: this.password,
         nickname: this.nickname,
         searchable: this.searchable
       }
-      this.axios.post('/api/signUp', this.reqeustBody)
+      this.axios.post('/api/signUp', requestBody)
         .then((res) => {
           alert('회원가입 완료')
           this.$router.push('/login')

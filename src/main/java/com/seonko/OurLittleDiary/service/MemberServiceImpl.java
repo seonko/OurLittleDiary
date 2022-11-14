@@ -47,4 +47,9 @@ public class MemberServiceImpl implements MemberService{
     public Member getMemberByNickname(String nickname) {
         return memberRepository.findByNickname(nickname);
     }
+
+    @Override
+    public Boolean checkEmailDuplicate(String email) {
+        return memberRepository.existsByEmail(email);
+    }
 }
