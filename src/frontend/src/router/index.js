@@ -26,12 +26,8 @@ export default router
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters.isLogin) {
-      if (!document.cookie.indexOf('rtk')) {
-        alert('로그인이 필요한 요청입니다.')
-        next('/login')
-      } else {
-        next()
-      }
+      alert('로그인이 필요한 요청입니다.')
+      next('/login')
     } else {
       next()
     }

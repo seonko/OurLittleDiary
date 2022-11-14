@@ -1,5 +1,6 @@
 package com.seonko.OurLittleDiary.config.jwt;
 
+import antlr.Token;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -79,13 +80,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         try {
             if (header != null) {
                 accessToken = header.replace(JwtProperties.TOKEN_PREFIX, "");
-                accessUsername = JWT.require(Algorithm.HMAC512(JwtProperties.ACCESS_TOKEN_SECRET)).build().verify(accessToken)
+                accessUsername = JWT.require(Algorithm.HMAC512(JwtProperties.ACCESS_TOKEN_SECRET))
+                        .build().verify(accessToken)
                         .getClaim("username").asString();
             } else {
                 chain.doFilter(request, response);
                 return;
             }
-        } catch (Exception e) {
+        } catch (TokenExpiredException e) {
             isAccessTokenValidate = false;
         }
 
@@ -98,14 +100,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     if (tmp[0].equals("refresh_token")) {
                         refreshToken = tmp[1].replace(JwtProperties.TOKEN_PREFIX, "");
                     }
-                    refreshUsername = JWT.require(Algorithm.HMAC512(JwtProperties.REFRESH_TOKEN_SECRET)).build().verify(refreshToken)
+                    refreshUsername = JWT.require(Algorithm.HMAC512(JwtProperties.REFRESH_TOKEN_SECRET))
+                            .build().verify(refreshToken)
                             .getClaim("username").asString();
                 }
             } else{
                 chain.doFilter(request, response);
                 return;
             }
-        } catch (Exception e) {
+        } catch (TokenExpiredException e) {
             isRefreshTokenValidate = false;
         }
 
@@ -118,14 +121,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
             } else {
                 // 재로그인 필요
-                response.addHeader(JwtProperties.HEADER_STRING, "Login Invalidate");
                 chain.doFilter(request, response);
                 return;
             }
         } else {
             member = memberRepository.findByEmail(accessUsername).orElse(null);
             refreshToken = reIssueRefreshToken(member);
-            response.addHeader("Set-Cookie", "refresh_token=" + JwtProperties.TOKEN_PREFIX + refreshToken + "; HttpOnly");
+            response.addHeader("Set-Cookie", "refresh_token="
+                                + JwtProperties.TOKEN_PREFIX + refreshToken + "; HttpOnly");
         }
 
         if (member != null) {
