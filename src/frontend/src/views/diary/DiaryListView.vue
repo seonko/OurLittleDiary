@@ -39,7 +39,10 @@ export default {
       modalVal: false,
       memberId: 0,
       diaryList: [],
-      partMemberList: []
+      partMemberList: [],
+      currentYear: new Date().getFullYear(),
+      currentMonth: new Date().getMonth() + 1,
+      currentDay: new Date().getDate()
     }
   },
   components: {
@@ -73,6 +76,13 @@ export default {
     goToDiary (diaryId) {
       this.$router.push('/diary/' + diaryId)
       this.$store.dispatch('setDiaryId', diaryId)
+      if (this.currentMonth < 10) {
+        this.currentMonth = '0' + this.currentMonth
+      }
+      if (this.currentDay < 10) {
+        this.currentDay = '0' + this.currentDay
+      }
+      this.$store.dispatch('setPostDay', this.currentYear + '-' + this.currentMonth + '-' + this.currentDay)
     }
   }
 }

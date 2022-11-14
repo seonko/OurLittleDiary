@@ -17,6 +17,7 @@ public class DiaryMemberDTO {
         return DiaryMember.builder()
                 .diary(diary)
                 .member(member)
+                .role(role)
                 .build();
     }
 

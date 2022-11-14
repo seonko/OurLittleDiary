@@ -58,10 +58,11 @@ public class DiaryServiceImpl implements DiaryService {
     // 다이어리 멤버 추가
     @Override
     @Transactional
-    public Long diaryMemberSave(Diary diary, Member member) throws Exception {
+    public Long diaryMemberSave(Diary diary, Member member, String role) throws Exception {
         DiaryMemberDTO diaryMemberDTO = new DiaryMemberDTO();
         diaryMemberDTO.setDiary(diary);
         diaryMemberDTO.setMember(member);
+        diaryMemberDTO.setRole(role);
         return diaryMemberRepository.save(diaryMemberDTO.toEntity()).getId();
     }
 

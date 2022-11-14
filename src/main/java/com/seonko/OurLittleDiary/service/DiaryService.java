@@ -14,7 +14,7 @@ public interface DiaryService {
 
     Diary createDiary(String diaryName) throws Exception;
     void saveThumbnail(Diary diary, MultipartFile mFile);
-    Long diaryMemberSave(Diary diary, Member member) throws Exception;
+    Long diaryMemberSave(Diary diary, Member member, String role) throws Exception;
     HashMap<String, Object> diaryList(Long memberId) throws Exception;
     void createPost(PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception;
     List<Post> diaryPostList(Long diaryId, String targetDate) throws Exception;
