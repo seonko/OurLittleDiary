@@ -33,4 +33,10 @@ public class MemberController {
     public String sendEmail(@PathVariable String email) throws Exception{
         return mailService.sendMessage(email);
     }
+
+    // 닉네임 중복 체크
+    @GetMapping("/api/checkNicknameDuplicate/{nickname}")
+    public Boolean checkNicknameDuplicate(@PathVariable String nickname) throws Exception {
+        return memberService.checkNicknameDuplicate(nickname);
+    }
 }

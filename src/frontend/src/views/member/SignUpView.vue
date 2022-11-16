@@ -5,28 +5,34 @@
       <h1 class="h3 mb-3 fw-normal"><b>회원가입</b></h1>
       <div class="form-floating">
         <input type="email" class="form-control" id="email" v-model="email" placeholder="Email" required>
-        <label for="email" class="">Email address</label>
+        <label for="email" class="mt">이메일 아이디</label>
       </div>
       <br>
-      <button type="button" class="btn btn-dark" @click="checkEmailDuplicate">인증메일보내기</button><br>
+      <button type="button" class="btn btn-dark" @click="checkEmailDuplicate">인증 메일 발송</button><br>
       <div class="form-floating">
         <br>
-        <input type="text" class="form-control" id="password" v-model="password" placeholder="Password" required>
-        <label for="password" class="mt-4">Password</label>
+        <input type="text" class="form-control" id="authNoBox" v-model="authCodeCheck" placeholder="인증 번호" :disabled="emailDuplicatedCheck" :style="{'border-color':authCodeBoxColor}" @blur="checkAuthCode">
+        <label for="authNoBox" class="mt-4" :style="{color:authCodeBoxColor}">인증 번호 입력</label>
       </div>
-      <!-- <div class="form-floating">
-        <input type="text" class="form-control" id="password2" @input="pwCheck" v-model="passwordForChecking" placeholder="Password Check" required>
-        <label for="passwordForChecking" class="">Password Check</label>
-        <span id="pwCheckResult">{{ pwCheckResult }}</span>
-      </div> -->
+      <div class="form-floating">
+        <br>
+        <input type="password" class="form-control" id="password" v-model="password" placeholder="Password" :style="{'border-color':pwCheckResultColor}" required>
+        <label for="password" class="mt-4" :style="{color:pwCheckResultColor}">비밀번호</label>
+      </div>
+      <div class="form-floating">
+        <input type="password" class="form-control" id="password2" v-model="passwordForChecking" placeholder="Password Check" :style="{'border-color':pwCheckResultColor}" required>
+        <label for="passwordForChecking" :style="{color:pwCheckResultColor}">비밀번호 재입력</label>
+      </div>
       <br>
       <div class="form-floating">
-        <input type="text" class="form-control" id="name" v-model="nickname" placeholder="NICKNAME" required>
-        <label for="nickname">NICKNAME</label>
-        <!-- <span id="nicknameCheckResult">{{ nicknameCheckResult }}</span> -->
+        <input type="text" class="form-control" id="name" v-model="nickname" placeholder="Nickname" @blur="checkNicknameDuplicate" required>
+        <label for="nickname">닉네임</label>
       </div>
+      <span v-if="nicknameDuplicatedCheck && nicknameDuplicatedCheck !== null">
+        이미 사용 중인 닉네임입니다.
+      </span>
       <br>
-      <!-- <button type="button" class="btn btn-dark" @click="checkName">중복 체크</button> -->
+      <br>
       아이디 검색을 허용하시겠습니까?
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" v-model="searchable" value=true checked>
@@ -53,29 +59,51 @@ export default {
       password: '',
       passwordForChecking: '',
       nickname: '',
-      emailDuplicated: false,
+      emailDuplicatedCheck: true,
       searchable: true,
-      emailCheckCode: ''
+      authCode: '',
+      authCodeCheck: '',
+      authCodeCorrect: null,
+      authCodeBoxColor: '',
+      pwCheckResult: null,
+      pwCheckResultColor: '',
+      nicknameDuplicatedCheck: null
     }
   },
   methods: {
     sendEmail (email) {
       this.axios.get('/api/sendEmail/' + email)
         .then((res) => {
-          alert('확인 코드를 전송하였습니다.')
-          this.emailCheckCode = res.data
+          this.authCode = res.data
         })
     },
     checkEmailDuplicate () {
       this.axios.get('/api/checkEmailDuplicate/' + this.email)
         .then((res) => {
-          this.emailDuplicated = res.data
+          this.emailDuplicatedCheck = res.data
           if (res.data) {
             alert('해당 이메일로 가입된 계정이 이미 존재합니다.')
           } else {
+            alert('인증 코드를 전송하였습니다.')
             this.sendEmail(this.email)
           }
         })
+    },
+    checkNicknameDuplicate () {
+      if (this.nickname !== '') {
+        this.axios.get('/api/checkNicknameDuplicate/' + this.nickname)
+          .then((res) => {
+            this.nicknameDuplicatedCheck = res.data
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      } else {
+        this.nicknameDuplicatedCheck = false
+      }
+    },
+    checkAuthCode () {
+      this.authCodeCorrect = (this.authCode === this.authCodeCheck)
     },
     signUp (event) {
       const requestBody = {
@@ -93,6 +121,40 @@ export default {
           console.log(error)
         })
     }
+  },
+  watch: {
+    authCodeCorrect (newAuthCodeCorrect) {
+      if (newAuthCodeCorrect) {
+        this.authCodeBoxColor = 'green'
+      } else {
+        this.authCodeBoxColor = 'red'
+      }
+    },
+    password (newPassword) {
+      if (this.password === '' || this.passwordForChecking === '') {
+        this.pwCheckResult = null
+      } else {
+        this.pwCheckResult = (newPassword === this.passwordForChecking)
+      }
+    },
+    passwordForChecking (newPasswordForChecking) {
+      if (this.password === '' || this.passwordForChecking === '') {
+        this.pwCheckResult = null
+      } else {
+        this.pwCheckResult = (this.password === newPasswordForChecking)
+      }
+    },
+    pwCheckResult (newPwCheckResult) {
+      if (newPwCheckResult === null) {
+        this.pwCheckResultColor = ''
+      } else {
+        if (newPwCheckResult) {
+          this.pwCheckResultColor = 'green'
+        } else {
+          this.pwCheckResultColor = 'red'
+        }
+      }
+    }
   }
 }
 </script>
@@ -108,12 +170,9 @@ padding-top: 40px;
 padding-bottom: 40px;
 background-color: white;
 }
-span {
-color: blue;
-}
 .form-signin {
-max-width: 330px;
-padding: 15px;
+max-width: 300px;
+padding: 5px;
 }
 .form-signin .form-floating:focus-within {
 z-index: 2;

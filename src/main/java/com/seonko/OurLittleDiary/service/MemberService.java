@@ -11,4 +11,5 @@ public interface MemberService{
     List<String> memberNicknameSearch(String keyword);
     Member getMemberByNickname(String nickname);
     Boolean checkEmailDuplicate(String email);
+    Boolean checkNicknameDuplicate(String nickname);
 }
