@@ -26,8 +26,8 @@ export default {
       this.requestBody = {
         title: this.title,
         content: this.content,
-        diaryId: this.$store.state.diaryStore.diaryId,
-        postId: parseInt(this.$store.state.diaryStore.fnPost.substr(4))
+        diaryId: this.$store.state.diaryStore.diaryId
+        // postId: parseInt(this.$store.state.diaryStore.fnPost.substr(4))
       }
       this.axios.post('/api/post/write', this.requestBody)
         .then((response) => {

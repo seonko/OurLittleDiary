@@ -2,7 +2,11 @@ package com.seonko.OurLittleDiary.controller;
 
 import com.seonko.OurLittleDiary.config.auth.PrincipalDetails;
 import com.seonko.OurLittleDiary.domain.Post;
+import com.seonko.OurLittleDiary.domain.Reply;
 import com.seonko.OurLittleDiary.dto.CreatePostDTO;
+import com.seonko.OurLittleDiary.dto.CreateReplyDTO;
+import com.seonko.OurLittleDiary.service.PostService;
+import com.seonko.OurLittleDiary.service.ReplyService;
 import com.seonko.OurLittleDiary.util.GsonUtil;
 import com.seonko.OurLittleDiary.domain.Diary;
 import com.seonko.OurLittleDiary.domain.Member;
@@ -21,6 +25,8 @@ public class DiaryController {
 
     private final DiaryServiceImpl diaryService;
     private final MemberService memberService;
+    private final PostService postService;
+    private final ReplyService replyService;
 
     // 참여 멤버 검색
     @GetMapping("/api/diary/memberSearch")
@@ -56,25 +62,43 @@ public class DiaryController {
     // 다이어리 글 작성 및 수정
     @PostMapping("/api/post/write")
     public void createPost(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody CreatePostDTO createPostDTO) throws Exception {
-        diaryService.createPost(principalDetails, createPostDTO);
+        postService.createPost(principalDetails, createPostDTO);
     }
 
     // 다이어리 Post 리스트
     @GetMapping("/api/postList")
     public List<Post> postList(@RequestParam Long diaryId, @RequestParam String postDay) throws Exception {
-        return diaryService.diaryPostList(diaryId, postDay);
+        return postService.diaryPostList(diaryId, postDay);
     }
 
     // 다이어리 글 보기
     @GetMapping("/api/getPost")
     public Post getPost(@RequestParam Long postId) throws Exception {
-        return diaryService.readPost(postId);
+        return postService.readPost(postId);
     }
 
     // 다이어리 글 삭제
     @DeleteMapping("/api/deletePost/{postId}")
     public void deletePost(@PathVariable Long postId) throws Exception {
-        diaryService.deletePost(postId);
+        postService.deletePost(postId);
+    }
+
+    // Post 댓글 리스트
+    @GetMapping("/api/replyList")
+    public List<Reply> replyList(@RequestParam Long postId) throws Exception {
+        return replyService.postReplyList(postId);
+    }
+
+    // Post 댓글 작성 및 수정
+    @PostMapping("/api/reply/write")
+    public void createReply(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody CreateReplyDTO createReplyDTO) throws Exception {
+        replyService.createReply(principalDetails, createReplyDTO);
+    }
+
+    // Post 댓글 삭제
+    @DeleteMapping("/api/reply/delete")
+    public void deleteReply(@RequestParam Long replyId) throws Exception {
+        replyService.deleteReply(replyId);
     }
 
 }
