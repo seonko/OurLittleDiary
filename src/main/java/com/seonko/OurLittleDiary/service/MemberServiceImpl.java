@@ -52,4 +52,9 @@ public class MemberServiceImpl implements MemberService{
     public Boolean checkEmailDuplicate(String email) {
         return memberRepository.existsByEmail(email);
     }
+
+    @Override
+    public Boolean checkNicknameDuplicate(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
 }
