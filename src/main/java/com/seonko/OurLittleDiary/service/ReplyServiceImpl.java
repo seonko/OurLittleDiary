@@ -23,8 +23,7 @@ public class ReplyServiceImpl implements ReplyService{
     // Post Reply 리스트
     @Override
     public List<Reply> postReplyList(Long postId) throws Exception {
-        Post post = postRepository.findById(postId).orElseThrow();
-        return replyRepository.findByPost(post);
+        return postRepository.findById(postId).get().getReplies();
     }
 
     // Post Reply 작성 및 수정
