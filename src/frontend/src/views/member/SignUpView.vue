@@ -23,12 +23,14 @@
         <input type="password" class="form-control" id="password2" v-model="passwordForChecking" placeholder="Password Check" :style="{'border-color':pwCheckResultColor}" required>
         <label for="passwordForChecking" :style="{color:pwCheckResultColor}">비밀번호 재입력</label>
       </div>
+      <span class="pw-info">비밀번호는 영문, 숫자, 특수문자를 포함한 <br> 8~20자리 이내로 입력해 주세요.</span>
+      <br>
       <br>
       <div class="form-floating">
-        <input type="text" class="form-control" id="name" v-model="nickname" placeholder="Nickname" @blur="checkNicknameDuplicate" required>
-        <label for="nickname">닉네임</label>
+        <input type="text" class="form-control" id="name" v-model="nickname" placeholder="Nickname" :style="{'border-color':nicknameCheckResultColor}" @blur="checkNicknameDuplicate" required>
+        <label for="nickname" :style="{color:nicknameCheckResultColor}">닉네임</label>
       </div>
-      <span v-if="nicknameDuplicatedCheck && nicknameDuplicatedCheck !== null">
+      <span v-if="nicknameDuplicatedCheckResult && nicknameDuplicatedCheckResult !== null" :style="{color: 'red'}">
         이미 사용 중인 닉네임입니다.
       </span>
       <br>
@@ -67,7 +69,8 @@ export default {
       authCodeBoxColor: '',
       pwCheckResult: null,
       pwCheckResultColor: '',
-      nicknameDuplicatedCheck: null
+      nicknameDuplicatedCheckResult: null,
+      nicknameCheckResultColor: ''
     }
   },
   methods: {
@@ -78,32 +81,37 @@ export default {
         })
     },
     checkEmailDuplicate () {
-      this.axios.get('/api/checkEmailDuplicate/' + this.email)
-        .then((res) => {
-          this.emailDuplicatedCheck = res.data
-          if (res.data) {
-            alert('해당 이메일로 가입된 계정이 이미 존재합니다.')
-          } else {
-            alert('인증 코드를 전송하였습니다.')
-            this.sendEmail(this.email)
-          }
-        })
+      if (this.email === '') {
+        alert('이메일을 입력해 주세요.')
+      } else {
+        this.axios.get('/api/checkEmailDuplicate/' + this.email)
+          .then((res) => {
+            this.emailDuplicatedCheck = res.data
+            if (res.data) {
+              alert('해당 이메일로 가입된 계정이 이미 존재합니다.')
+            } else {
+              alert('인증 코드를 전송하였습니다.')
+              this.sendEmail(this.email)
+            }
+          })
+      }
     },
     checkNicknameDuplicate () {
       if (this.nickname !== '') {
         this.axios.get('/api/checkNicknameDuplicate/' + this.nickname)
           .then((res) => {
-            this.nicknameDuplicatedCheck = res.data
+            this.nicknameDuplicatedCheckResult = res.data
           })
           .catch((err) => {
             console.log(err)
           })
       } else {
-        this.nicknameDuplicatedCheck = false
+        this.nicknameDuplicatedCheckResult = false
       }
     },
     checkAuthCode () {
       this.authCodeCorrect = (this.authCode === this.authCodeCheck)
+      this.authCodeBoxColor = (this.authCodeCheck === '') ? '' : (this.authCodeCorrect) ? 'green' : 'red'
     },
     signUp (event) {
       const requestBody = {
@@ -123,13 +131,6 @@ export default {
     }
   },
   watch: {
-    authCodeCorrect (newAuthCodeCorrect) {
-      if (newAuthCodeCorrect) {
-        this.authCodeBoxColor = 'green'
-      } else {
-        this.authCodeBoxColor = 'red'
-      }
-    },
     password (newPassword) {
       if (this.password === '' || this.passwordForChecking === '') {
         this.pwCheckResult = null
@@ -145,15 +146,10 @@ export default {
       }
     },
     pwCheckResult (newPwCheckResult) {
-      if (newPwCheckResult === null) {
-        this.pwCheckResultColor = ''
-      } else {
-        if (newPwCheckResult) {
-          this.pwCheckResultColor = 'green'
-        } else {
-          this.pwCheckResultColor = 'red'
-        }
-      }
+      this.pwCheckResultColor = (newPwCheckResult === null) ? '' : newPwCheckResult ? 'green' : 'red'
+    },
+    nicknameDuplicatedCheckResult (newNicknameDuplicatedCheckResult) {
+      this.nicknameCheckResultColor = (newNicknameDuplicatedCheckResult === null) ? '' : newNicknameDuplicatedCheckResult ? 'red' : 'green'
     }
   }
 }
@@ -182,5 +178,9 @@ margin-right: 10px;
 }
 .btn-lg {
 font-weight: bold;
+}
+.pw-info {
+font-size: 11px;
+color: rgb(151, 151, 151);
 }
 </style>
