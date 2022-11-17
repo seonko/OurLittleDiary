@@ -11,24 +11,26 @@
       <button type="button" class="btn btn-dark" @click="checkEmailDuplicate">인증 메일 발송</button><br>
       <div class="form-floating">
         <br>
-        <input type="text" class="form-control" id="authNoBox" v-model="authCodeCheck" placeholder="인증 번호" :disabled="emailDuplicatedCheck" :style="{'border-color':authCodeBoxColor}" @blur="checkAuthCode">
+        <input type="text" class="form-control" ref="authNoInput" v-model="authCodeCheck" placeholder="인증 번호" :disabled="emailDuplicatedCheck" :style="{'border-color':authCodeBoxColor}" @blur="checkAuthCode">
         <label for="authNoBox" class="mt-4" :style="{color:authCodeBoxColor}">인증 번호 입력</label>
       </div>
       <div class="form-floating">
         <br>
-        <input type="password" class="form-control" id="password" v-model="password" placeholder="Password" :style="{'border-color':pwCheckResultColor}" required>
+        <input type="password" class="form-control" ref="passwordInput" v-model="password" placeholder="Password" :style="{'border-color':pwCheckResultColor}" required>
         <label for="password" class="mt-4" :style="{color:pwCheckResultColor}">비밀번호</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="password2" v-model="passwordForChecking" placeholder="Password Check" :style="{'border-color':pwCheckResultColor}" required>
+        <input type="password" class="form-control" ref="passwordForCheckingInput" v-model="passwordForChecking" placeholder="Password Check" :style="{'border-color':pwCheckResultColor}" required>
         <label for="passwordForChecking" :style="{color:pwCheckResultColor}">비밀번호 재입력</label>
       </div>
+      <span class="pw-info">비밀번호는 영문, 숫자, 특수문자를 포함하여 <br> 공백 없이 8~20자리 이내로 입력해 주세요.</span>
+      <br>
       <br>
       <div class="form-floating">
-        <input type="text" class="form-control" id="name" v-model="nickname" placeholder="Nickname" @blur="checkNicknameDuplicate" required>
-        <label for="nickname">닉네임</label>
+        <input type="text" class="form-control" ref="nicknameInput" v-model="nickname" placeholder="Nickname" :style="{'border-color':nicknameCheckResultColor}" @blur="checkNicknameDuplicate" required>
+        <label for="nickname" :style="{color:nicknameCheckResultColor}">닉네임</label>
       </div>
-      <span v-if="nicknameDuplicatedCheck && nicknameDuplicatedCheck !== null">
+      <span v-if="!nicknameDuplicatedCheckResult && nicknameDuplicatedCheckResult !== null" :style="{color: 'red'}">
         이미 사용 중인 닉네임입니다.
       </span>
       <br>
@@ -67,7 +69,8 @@ export default {
       authCodeBoxColor: '',
       pwCheckResult: null,
       pwCheckResultColor: '',
-      nicknameDuplicatedCheck: null
+      nicknameDuplicatedCheckResult: null,
+      nicknameCheckResultColor: ''
     }
   },
   methods: {
@@ -78,58 +81,84 @@ export default {
         })
     },
     checkEmailDuplicate () {
-      this.axios.get('/api/checkEmailDuplicate/' + this.email)
-        .then((res) => {
-          this.emailDuplicatedCheck = res.data
-          if (res.data) {
-            alert('해당 이메일로 가입된 계정이 이미 존재합니다.')
-          } else {
-            alert('인증 코드를 전송하였습니다.')
-            this.sendEmail(this.email)
-          }
-        })
+      if (this.email === '') {
+        alert('이메일을 입력해 주세요.')
+      } else {
+        this.axios.get('/api/checkEmailDuplicate/' + this.email)
+          .then((res) => {
+            this.emailDuplicatedCheck = res.data
+            if (res.data) {
+              alert('해당 이메일로 가입된 계정이 이미 존재합니다.')
+            } else {
+              alert('인증 코드를 전송하였습니다.')
+              this.sendEmail(this.email)
+            }
+          })
+      }
     },
     checkNicknameDuplicate () {
       if (this.nickname !== '') {
         this.axios.get('/api/checkNicknameDuplicate/' + this.nickname)
           .then((res) => {
-            this.nicknameDuplicatedCheck = res.data
+            this.nicknameDuplicatedCheckResult = !res.data
           })
           .catch((err) => {
             console.log(err)
           })
       } else {
-        this.nicknameDuplicatedCheck = false
+        this.nicknameDuplicatedCheckResult = false
       }
     },
     checkAuthCode () {
       this.authCodeCorrect = (this.authCode === this.authCodeCheck)
+      this.authCodeBoxColor = (this.authCodeCheck === '') ? '' : (this.authCodeCorrect) ? 'green' : 'red'
     },
     signUp (event) {
-      const requestBody = {
-        email: this.email,
-        password: this.password,
-        nickname: this.nickname,
-        searchable: this.searchable
+      const num = this.password.search(/[0-9]/g)
+      const eng = this.password.search(/[a-z]/ig)
+      const spe = this.password.search(/[`~!#$%^&*|\\'";:/?]/gi)
+      if (this.authCodeCorrect === null) {
+        alert('이메일 인증을 진행해 주세요.')
+      } else if (!this.authCodeCorrect) {
+        this.$refs.authNoInput.focus()
+      } else if (this.password.length < 8 || this.password.length > 20) {
+        alert('비밀번호는 8~20자리 이내로 설정해 주세요.')
+        this.passwordForChecking = ''
+        this.password = ''
+        this.$refs.passwordInput.focus()
+      } else if (this.password.search(/\s/) !== -1) {
+        alert('비밀번호에 공백을 포함할 수 없습니다.')
+        this.passwordForChecking = ''
+        this.password = ''
+        this.$refs.passwordInput.focus()
+      } else if (num < 0 || eng < 0 || spe < 0) {
+        alert('비밀번호에는 영문, 숫자, 특수문자가 모두 포함되어야 합니다.')
+        this.passwordForChecking = ''
+        this.password = ''
+        this.$refs.passwordInput.focus()
+      } else if (!this.pwCheckResult) {
+        this.$refs.passwordForCheckingInput.focus()
+      } else if (!this.nicknameDuplicatedCheckResult) {
+        this.$refs.nicknameInput.focus()
+      } else {
+        const requestBody = {
+          email: this.email,
+          password: this.password,
+          nickname: this.nickname,
+          searchable: this.searchable
+        }
+        this.axios.post('/api/signUp', requestBody)
+          .then((res) => {
+            alert('회원가입 완료')
+            this.$router.push('/login')
+          })
+          .catch((error) => {
+            console.log(error)
+          })
       }
-      this.axios.post('/api/signUp', requestBody)
-        .then((res) => {
-          alert('회원가입 완료')
-          this.$router.push('/login')
-        })
-        .catch((error) => {
-          console.log(error)
-        })
     }
   },
   watch: {
-    authCodeCorrect (newAuthCodeCorrect) {
-      if (newAuthCodeCorrect) {
-        this.authCodeBoxColor = 'green'
-      } else {
-        this.authCodeBoxColor = 'red'
-      }
-    },
     password (newPassword) {
       if (this.password === '' || this.passwordForChecking === '') {
         this.pwCheckResult = null
@@ -145,15 +174,10 @@ export default {
       }
     },
     pwCheckResult (newPwCheckResult) {
-      if (newPwCheckResult === null) {
-        this.pwCheckResultColor = ''
-      } else {
-        if (newPwCheckResult) {
-          this.pwCheckResultColor = 'green'
-        } else {
-          this.pwCheckResultColor = 'red'
-        }
-      }
+      this.pwCheckResultColor = (newPwCheckResult === null) ? '' : newPwCheckResult ? 'green' : 'red'
+    },
+    nicknameDuplicatedCheckResult (newNicknameDuplicatedCheckResult) {
+      this.nicknameCheckResultColor = (newNicknameDuplicatedCheckResult === null) ? '' : newNicknameDuplicatedCheckResult ? 'green' : 'red'
     }
   }
 }
@@ -182,5 +206,9 @@ margin-right: 10px;
 }
 .btn-lg {
 font-weight: bold;
+}
+.pw-info {
+font-size: 12px;
+color: rgb(151, 151, 151);
 }
 </style>
