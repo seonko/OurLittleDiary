@@ -73,6 +73,7 @@ export default {
           alert('댓글이 등록되었습니다.')
           this.getReplyList()
           this.content = ''
+          this.$store.dispatch('setFnReply', this.$store.state.diaryStore.fnReply + 1)
         })
         .catch((error) => {
           console.log(error)
@@ -93,7 +94,7 @@ export default {
         postId: parseInt(this.$store.state.diaryStore.fnPost.substr(4)),
         contentCreateDate: contentCreateDate
       }
-      this.axios.post('/api/reply/write', this.requestBody)
+      this.axios.put('/api/reply/update', this.requestBody)
         .then((res) => {
           alert('댓글이 수정되었습니다.')
           this.isEditMode[id] = false
@@ -113,6 +114,7 @@ export default {
           .then((res) => {
             alert('댓글이 삭제되었습니다.')
             this.getReplyList()
+            this.$store.dispatch('setFnReply', this.$store.state.diaryStore.fnReply + 1)
           })
           .catch((err) => {
             console.log(err)

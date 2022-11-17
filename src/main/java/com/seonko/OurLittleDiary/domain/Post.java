@@ -55,6 +55,16 @@ public class Post {
         this.contentCreateDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
+    public void addReplyCount() {
+        this.replyCount++;
+    }
+
+    public void deleteReplyCount() {
+        if (this.replyCount != 0) {
+            this.replyCount--;
+        }
+    }
+
     @Builder
     public Post(Long id, Diary diary, String title, String content, Member member, int replyCount, String contentCreateDate) {
         this.id = id;

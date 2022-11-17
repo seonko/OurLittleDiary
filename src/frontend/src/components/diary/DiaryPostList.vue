@@ -12,7 +12,7 @@
       <tbody v-if="postList.length">
         <tr v-for="(row, idx) in postList" :key="idx">
           <td>{{ row.id }}</td>
-          <td @click="fnPostRead(row.id)"><strong class="postTitle">{{ row.title }}</strong></td>
+          <td @click="fnPostRead(row.id)"><strong class="postTitle">{{ row.title }}</strong><span style="color:red;margin:5px">[{{ row.replyCount }}]</span></td>
           <td>{{ row.member.nickname }}</td>
           <td>{{ row.contentCreateDate.substr(11, 5) }}</td>
         </tr>
@@ -71,6 +71,10 @@ export default {
     check_postDay () {
       this.getPostList()
       return this.$store.getters.postDay
+    },
+    check_fnReply () {
+      this.getPostList()
+      return this.$store.getters.fnReply
     }
   },
   watch: {
@@ -79,6 +83,9 @@ export default {
     },
     check_postDay (val) {
       this.postDay = val
+    },
+    check_fnReply (val) {
+      this.fnReply = val
     }
   }
 }

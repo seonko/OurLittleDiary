@@ -26,22 +26,42 @@ public class ReplyServiceImpl implements ReplyService{
         return postRepository.findById(postId).get().getReplies();
     }
 
-    // Post Reply 작성 및 수정
+    // Post Reply 작성
     @Transactional
     @Override
     public void createReply(@AuthenticationPrincipal PrincipalDetails principalDetails, CreateReplyDTO createReplyDTO) throws Exception {
+        Post post = postRepository.findById(createReplyDTO.getPostId()).orElseThrow();
+        post.addReplyCount();
+        postRepository.save(post);
         replyRepository.save(Reply.builder()
                         .id(createReplyDTO.getReplyId())
-                        .post(postRepository.findById(createReplyDTO.getPostId()).orElseThrow())
+                        .post(post)
                         .content(createReplyDTO.getContent())
                         .member(principalDetails.getMember())
                         .contentCreateDate(createReplyDTO.getContentCreateDate())
                 .build());
     }
 
+    // Post Reply 수정
+    @Override
+    public void updateReply(@AuthenticationPrincipal PrincipalDetails principalDetails, CreateReplyDTO createReplyDTO) throws Exception {
+        Post post = postRepository.findById(createReplyDTO.getPostId()).orElseThrow();
+        replyRepository.save(Reply.builder()
+                .id(createReplyDTO.getReplyId())
+                .post(post)
+                .content(createReplyDTO.getContent())
+                .member(principalDetails.getMember())
+                .contentCreateDate(createReplyDTO.getContentCreateDate())
+                .build());
+    }
+
     // Post Reply 삭제
     @Override
     public void deleteReply(Long replyId) throws Exception {
+        Reply reply = replyRepository.findById(replyId).orElseThrow();
+        Post post = postRepository.findById(reply.getPost().getId()).orElseThrow();
+        post.deleteReplyCount();
+        postRepository.save(post);
         replyRepository.deleteById(replyId);
     }
 

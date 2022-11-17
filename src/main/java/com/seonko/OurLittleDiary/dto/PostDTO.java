@@ -6,7 +6,6 @@ import com.seonko.OurLittleDiary.domain.Post;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Data
 public class PostDTO {
@@ -25,7 +24,6 @@ public class PostDTO {
                 .title(title)
                 .content(content)
                 .member(member)
-                .replyCount(replyCount)
                 .build();
     }
 

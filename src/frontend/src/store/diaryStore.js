@@ -3,7 +3,7 @@ const diaryStore = ({
     diaryId: null,
     fnPost: null,
     postDay: null,
-    fnReply: null
+    fnReply: 0
   },
   getters: {
     diaryId (state) {
