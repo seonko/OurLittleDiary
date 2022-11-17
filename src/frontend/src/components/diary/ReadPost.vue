@@ -7,7 +7,7 @@
     <div class="postContentArea">
       <p style="white-space: pre-line;">{{ content }}</p>
     </div>
-    <div>
+    <div v-if="nickname === this.$store.state.memberStore.nickname">
       <button class="btn" @click="updatePost">수정</button>
       <button class="btn" @click="deletePost">삭제</button>
     </div>

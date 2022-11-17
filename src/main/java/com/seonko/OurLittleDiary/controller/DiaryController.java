@@ -89,10 +89,16 @@ public class DiaryController {
         return replyService.postReplyList(postId);
     }
 
-    // Post 댓글 작성 및 수정
+    // Post 댓글 작성
     @PostMapping("/api/reply/write")
     public void createReply(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody CreateReplyDTO createReplyDTO) throws Exception {
         replyService.createReply(principalDetails, createReplyDTO);
+    }
+
+    // Post 댓글 수정
+    @PutMapping("/api/reply/update")
+    public void updateReply(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody CreateReplyDTO createReplyDTO) throws Exception {
+        replyService.updateReply(principalDetails, createReplyDTO);
     }
 
     // Post 댓글 삭제

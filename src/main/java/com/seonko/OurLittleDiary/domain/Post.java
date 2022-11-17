@@ -11,6 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "post")
 @Getter
@@ -45,9 +47,22 @@ public class Post {
     @Column(name = "reply_count")
     private int replyCount;
 
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private List<Reply> replies = new ArrayList<>();
+
     @PrePersist
     public void onPrePersist() {
         this.contentCreateDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public void addReplyCount() {
+        this.replyCount++;
+    }
+
+    public void deleteReplyCount() {
+        if (this.replyCount != 0) {
+            this.replyCount--;
+        }
     }
 
     @Builder

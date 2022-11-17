@@ -1,5 +1,7 @@
 package com.seonko.OurLittleDiary.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +27,7 @@ public class Reply {
 
     @JoinColumn(name = "post_id", nullable = false)
     @ManyToOne
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     private Post post;
 
     @Column(name = "content", nullable = false)
