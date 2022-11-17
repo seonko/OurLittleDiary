@@ -23,7 +23,7 @@
         <input type="password" class="form-control" id="password2" v-model="passwordForChecking" placeholder="Password Check" :style="{'border-color':pwCheckResultColor}" required>
         <label for="passwordForChecking" :style="{color:pwCheckResultColor}">비밀번호 재입력</label>
       </div>
-      <span class="pw-info">비밀번호는 영문, 숫자, 특수문자를 포함한 <br> 8~20자리 이내로 입력해 주세요.</span>
+      <span class="pw-info">비밀번호는 영문, 숫자, 특수문자를 포함하여 <br> 공백 없이 8~20자리 이내로 입력해 주세요.</span>
       <br>
       <br>
       <div class="form-floating">
@@ -114,20 +114,31 @@ export default {
       this.authCodeBoxColor = (this.authCodeCheck === '') ? '' : (this.authCodeCorrect) ? 'green' : 'red'
     },
     signUp (event) {
-      const requestBody = {
-        email: this.email,
-        password: this.password,
-        nickname: this.nickname,
-        searchable: this.searchable
+      const num = this.password.search(/[0-9]/g)
+      const eng = this.password.search(/[a-z]/ig)
+      const spe = this.password.search(/[`~!#$%^&*|\\'";:/?]/gi)
+      if (this.password.length < 8 || this.password.length > 20) {
+        alert('비밀번호는 8~20자리 이내로 설정해 주세요.')
+      } else if (this.password.search(/\s/) !== -1) {
+        alert('비밀번호에 공백을 포함할 수 없습니다.')
+      } else if (num < 0 || eng < 0 || spe < 0) {
+        alert('비밀번호에는 영문, 숫자, 특수문자가 모두 포함되어야 합니다.')
+      } else {
+        const requestBody = {
+          email: this.email,
+          password: this.password,
+          nickname: this.nickname,
+          searchable: this.searchable
+        }
+        this.axios.post('/api/signUp', requestBody)
+          .then((res) => {
+            alert('회원가입 완료')
+            this.$router.push('/login')
+          })
+          .catch((error) => {
+            console.log(error)
+          })
       }
-      this.axios.post('/api/signUp', requestBody)
-        .then((res) => {
-          alert('회원가입 완료')
-          this.$router.push('/login')
-        })
-        .catch((error) => {
-          console.log(error)
-        })
     }
   },
   watch: {
@@ -180,7 +191,7 @@ margin-right: 10px;
 font-weight: bold;
 }
 .pw-info {
-font-size: 11px;
+font-size: 12px;
 color: rgb(151, 151, 151);
 }
 </style>
