@@ -47,7 +47,6 @@ export default {
       }
       this.axios.post('/login', this.requestBody)
         .then((res) => {
-          alert('로그인 성공')
           this.$router.push('/diaryList')
           const token = res.headers.authorization
           console.log(token)
