@@ -47,7 +47,7 @@ public class Post {
     @Column(name = "reply_count")
     private int replyCount;
 
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     private List<Reply> replies = new ArrayList<>();
 
     @PrePersist

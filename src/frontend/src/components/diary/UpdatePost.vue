@@ -20,7 +20,8 @@ export default {
       content: '',
       nickname: '',
       contentCreateDate: '',
-      postId: parseInt(this.$store.state.diaryStore.fnPost.substr(6))
+      postId: parseInt(this.$store.state.diaryStore.fnPost.substr(6)),
+      replyCount: 0
     }
   },
   methods: {
@@ -35,6 +36,7 @@ export default {
           this.content = response.data.content
           this.nickname = response.data.member.nickname
           this.contentCreateDate = response.data.contentCreateDate
+          this.replyCount = response.data.replyCount
         })
         .catch((error) => {
           console.log(error)
@@ -46,9 +48,10 @@ export default {
         content: this.content,
         postId: this.postId,
         diaryId: this.$store.state.diaryStore.diaryId,
-        contentCreateDate: this.contentCreateDate
+        contentCreateDate: this.contentCreateDate,
+        replyCount: this.replyCount
       }
-      this.axios.post('/api/post/write', this.requestBody)
+      this.axios.put('/api/post/update', this.requestBody)
         .then((response) => {
           alert('일기가 수정되었습니다.')
           this.$store.dispatch('setFnPost', 'read' + this.postId)
