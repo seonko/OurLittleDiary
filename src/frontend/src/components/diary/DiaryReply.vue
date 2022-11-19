@@ -44,14 +44,19 @@ export default {
   },
   methods: {
     getReplyList () {
-      if (this.$store.state.diaryStore.fnPost !== null && this.$store.state.diaryStore.fnPost !== 'write' && this.$store.state.diaryStore.fnPost.substr(0, 6) !== 'update') {
+      if (this.$store.state.diaryStore.fnPost !== null && this.$store.state.diaryStore.fnPost !== 'write') {
+        if (this.$store.state.diaryStore.fnPost.substr(0, 6) === 'update') {
+          this.postId = this.$store.state.diaryStore.fnPost.substr(6)
+        } else {
+          this.postId = parseInt(this.$store.state.diaryStore.fnPost.substr(4))
+        }
         this.axios.get('/api/replyList', {
           params: {
-            postId: parseInt(this.$store.state.diaryStore.fnPost.substr(4))
+            postId: this.postId
           }
         })
           .then((response) => {
-            this.replyList = response.data
+            this.replyList = response.data.sort((a, b) => a.id - b.id)
             for (let i = 0; i < this.replyList.length; i++) {
               this.isEditMode[this.replyList[i].id] = false
             }

@@ -9,6 +9,7 @@ import java.util.List;
 public interface PostService {
 
     void createPost(PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception;
+    void updatePost(PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception;
     List<Post> diaryPostList(Long diaryId, String targetDate) throws Exception;
     Post readPost(Long postId) throws Exception;
     void deletePost(Long postId) throws Exception;

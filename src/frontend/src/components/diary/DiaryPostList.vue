@@ -47,7 +47,7 @@ export default {
         }
       })
         .then((response) => {
-          this.postList = response.data
+          this.postList = response.data.sort((a, b) => a.id - b.id)
         })
         .catch((error) => {
           console.log(error)

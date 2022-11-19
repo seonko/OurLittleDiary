@@ -20,10 +20,21 @@ public class PostServiceImpl implements PostService {
     private final DiaryRepository diaryRepository;
     private final PostRepository postRepository;
 
-    // 다이어리 글 작성 및 수정
+    // 다이어리 글 작성
     @Transactional
     @Override
     public void createPost(@AuthenticationPrincipal PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception {
+        postRepository.save(Post.builder()
+                        .diary(diaryRepository.findById(createPostDTO.getDiaryId()).orElseThrow())
+                        .member(principalDetails.getMember())
+                        .title(createPostDTO.getTitle())
+                        .content(createPostDTO.getContent())
+                .build());
+    }
+
+    // 다이어리 글 수정
+    @Override
+    public void updatePost(@AuthenticationPrincipal PrincipalDetails principalDetails, CreatePostDTO createPostDTO) throws Exception {
         postRepository.save(Post.builder()
                         .id(createPostDTO.getPostId())
                         .diary(diaryRepository.findById(createPostDTO.getDiaryId()).orElseThrow())
@@ -31,6 +42,7 @@ public class PostServiceImpl implements PostService {
                         .title(createPostDTO.getTitle())
                         .content(createPostDTO.getContent())
                         .contentCreateDate(createPostDTO.getContentCreateDate())
+                        .replyCount(createPostDTO.getReplyCount())
                 .build());
     }
 

@@ -59,10 +59,16 @@ public class DiaryController {
         return diaryService.diaryList(memberId);
     }
 
-    // 다이어리 글 작성 및 수정
+    // 다이어리 글 작성
     @PostMapping("/api/post/write")
     public void createPost(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody CreatePostDTO createPostDTO) throws Exception {
         postService.createPost(principalDetails, createPostDTO);
+    }
+
+    // 다이어리 글 작성 및 수정
+    @PutMapping("/api/post/update")
+    public void updatePost(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody CreatePostDTO createPostDTO) throws Exception {
+        postService.updatePost(principalDetails, createPostDTO);
     }
 
     // 다이어리 Post 리스트
