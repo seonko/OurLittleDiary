@@ -29,8 +29,11 @@ axiosInstance.interceptors.response.use(
     return res
   },
   function (err) {
-    store.dispatch('setToken', err.response.headers.authorization)
-    return axiosInstance.request(err.config)
+    if (err.response.headers.authorization) {
+      store.dispatch('setToken', err.response.headers.authorization)
+      return axiosInstance.request(err.config)
+    }
+    return Promise.reject(err)
   }
 )
 
