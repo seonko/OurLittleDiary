@@ -3,18 +3,16 @@ package com.seonko.OurLittleDiary.controller;
 import com.seonko.OurLittleDiary.dto.MemberDTO;
 import com.seonko.OurLittleDiary.service.MailService;
 import com.seonko.OurLittleDiary.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 
+@AllArgsConstructor
 @RestController
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
-
-    @Autowired
-    private MailService mailService;
+    private final MemberService memberService;
+    private final MailService mailService;
 
     // 회원가입
     @PostMapping("/api/signUp")
