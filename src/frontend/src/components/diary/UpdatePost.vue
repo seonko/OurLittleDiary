@@ -49,7 +49,8 @@ export default {
         postId: this.postId,
         diaryId: this.$store.state.diaryStore.diaryId,
         contentCreateDate: this.contentCreateDate,
-        replyCount: this.replyCount
+        replyCount: this.replyCount,
+        datetime: this.$store.state.diaryStore.postDay
       }
       this.axios.put('/api/post/update', this.requestBody)
         .then((response) => {

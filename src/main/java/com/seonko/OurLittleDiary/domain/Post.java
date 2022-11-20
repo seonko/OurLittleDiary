@@ -44,6 +44,9 @@ public class Post {
     @CreatedDate
     private String contentCreateDate;
 
+    @Column(name = "datetime")
+    private String datetime;
+
     @Column(name = "reply_count")
     private int replyCount;
 
@@ -66,7 +69,7 @@ public class Post {
     }
 
     @Builder
-    public Post(Long id, Diary diary, String title, String content, Member member, int replyCount, String contentCreateDate) {
+    public Post(Long id, Diary diary, String title, String content, Member member, int replyCount, String contentCreateDate, String datetime) {
         this.id = id;
         this.diary = diary;
         this.title = title;
@@ -74,6 +77,7 @@ public class Post {
         this.member = member;
         this.replyCount = replyCount;
         this.contentCreateDate = contentCreateDate;
+        this.datetime = datetime;
     }
 
 }

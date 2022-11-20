@@ -2,7 +2,7 @@
   <div class="postWriteArea">
     <input class="writeTitle form-control" type="text" v-model="title" placeholder="제목" required />
     <div class="postInfoArea">
-      <p>{{nickname}}  |  {{todayYear}}-{{todayMonth}}-{{todayDay}}</p>
+      <p>{{nickname}}  |  {{this.$store.state.diaryStore.postDay}}</p>
     </div>
     <textarea class="writeContent form-control" v-model="content" placeholder="내용을 입력하세요." required />
     <button class="btn" style="float:right;" @click="createPost()">등록</button>
@@ -26,8 +26,8 @@ export default {
       this.requestBody = {
         title: this.title,
         content: this.content,
-        diaryId: this.$store.state.diaryStore.diaryId
-        // postId: parseInt(this.$store.state.diaryStore.fnPost.substr(4))
+        diaryId: this.$store.state.diaryStore.diaryId,
+        datetime: this.$store.state.diaryStore.postDay
       }
       this.axios.post('/api/post/write', this.requestBody)
         .then((response) => {
