@@ -10,6 +10,7 @@ public class CreatePostDTO {
     private String title;
     private String content;
     private String contentCreateDate;
+    private String datetime;
     private int replyCount;
 
 }

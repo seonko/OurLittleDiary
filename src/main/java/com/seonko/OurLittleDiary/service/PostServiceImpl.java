@@ -29,6 +29,7 @@ public class PostServiceImpl implements PostService {
                         .member(principalDetails.getMember())
                         .title(createPostDTO.getTitle())
                         .content(createPostDTO.getContent())
+                        .datetime(createPostDTO.getDatetime())
                 .build());
     }
 
@@ -42,6 +43,7 @@ public class PostServiceImpl implements PostService {
                         .title(createPostDTO.getTitle())
                         .content(createPostDTO.getContent())
                         .contentCreateDate(createPostDTO.getContentCreateDate())
+                        .datetime(createPostDTO.getDatetime())
                         .replyCount(createPostDTO.getReplyCount())
                 .build());
     }
@@ -50,7 +52,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> diaryPostList(Long diaryId, String targetDate) throws Exception {
         Diary diary = diaryRepository.findById(diaryId).orElseThrow();
-        return postRepository.findByDiaryAndContentCreateDateContaining(diary, targetDate);
+        return postRepository.findByDiaryAndDatetime(diary, targetDate);
     }
 
     // 다이어리 글 보기

@@ -14,7 +14,12 @@
           <td>{{ row.id }}</td>
           <td @click="fnPostRead(row.id)"><strong class="postTitle">{{ row.title }}</strong><span style="color:red;margin:5px">[{{ row.replyCount }}]</span></td>
           <td>{{ row.member.nickname }}</td>
-          <td>{{ row.contentCreateDate.substr(11, 5) }}</td>
+          <td v-if="row.contentCreateDate.substr(0, 10) === row.datetime">
+            {{ row.contentCreateDate.substr(11, 5) }}
+          </td>
+          <td v-else>
+            {{ row.contentCreateDate.substr(5, 5) }}
+          </td>
         </tr>
       </tbody>
       <tbody v-else>
@@ -54,7 +59,18 @@ export default {
         })
     },
     fnPostWrite () {
-      this.$store.dispatch('setFnPost', 'write')
+      const date = new Date()
+      const todayYear = date.getFullYear()
+      const todayMonth = date.getMonth() + 1
+      const todayDay = date.getDate()
+      const postDayYear = Number(this.$store.state.diaryStore.postDay.substr(0, 4))
+      const postDayMonth = Number(this.$store.state.diaryStore.postDay.substr(5, 2))
+      const postDayDay = Number(this.$store.state.diaryStore.postDay.substr(8, 2))
+      if (todayYear >= postDayYear && todayMonth >= postDayMonth && todayDay >= postDayDay) {
+        this.$store.dispatch('setFnPost', 'write')
+      } else {
+        alert('미래의 일기는 작성할 수 없습니다.')
+      }
     },
     fnPostRead (postId) {
       this.$store.dispatch('setFnPost', 'read' + postId)

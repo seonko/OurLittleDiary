@@ -22,6 +22,9 @@
                     <span v-if="isToday(currentYear, currentMonth, day)" class="today">
                       {{day}}
                     </span>
+                    <span v-else-if="isClick(currentYear, currentMonth, day)" class="clicked">
+                      {{day}}
+                    </span>
                     <span v-else>
                       {{day}}
                     </span>
@@ -148,6 +151,15 @@ export default {
       const date = new Date()
       return year === date.getFullYear() && month === date.getMonth() + 1 && day === date.getDate()
     },
+    isClick (year, month, day) {
+      if (month < 10) {
+        month = '0' + month
+      }
+      if (day < 10) {
+        day = '0' + day
+      }
+      return year + '-' + month + '-' + day === this.$store.state.diaryStore.postDay
+    },
     onClickDay (year, month, day) {
       if (month < 10) {
         month = '0' + month
@@ -157,6 +169,17 @@ export default {
       }
       this.$store.dispatch('setPostDay', year + '-' + month + '-' + day)
       this.$store.dispatch('setFnPost', null)
+    }
+  },
+  computed: {
+    check_postDay () {
+      this.init()
+      return this.$store.getters.postDay
+    }
+  },
+  watch: {
+    check_postDay (val) {
+      this.postDay = val
     }
   }
 }
@@ -175,6 +198,14 @@ a {
   border-radius:15px 15px 15px 15px;
   border:solid 1px #ffffff;
   background-color:#2b6bd1;
+  padding:10px;
+  color:#ffffff;
+}
+.clicked {
+  -moz-border-radius:15px 15px 15px 15px;
+  border-radius:15px 15px 15px 15px;
+  border:solid 1px #ffffff;
+  background-color:#575555;
   padding:10px;
   color:#ffffff;
 }
