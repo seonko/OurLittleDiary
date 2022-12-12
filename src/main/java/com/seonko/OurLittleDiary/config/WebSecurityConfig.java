@@ -2,6 +2,7 @@ package com.seonko.OurLittleDiary.config;
 
 import com.seonko.OurLittleDiary.config.jwt.JwtAuthenticationFilter;
 import com.seonko.OurLittleDiary.config.jwt.JwtAuthorizationFilter;
+import com.seonko.OurLittleDiary.config.oauth.PrincipalOauth2UserService;
 import com.seonko.OurLittleDiary.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+
+    @Autowired
+    private PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -34,23 +38,29 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .addFilter(corsConfig.corsFilter())
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .formLogin().disable()
-                .httpBasic().disable()
+        http
+            .addFilter(corsConfig.corsFilter())
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .formLogin().disable()
+            .httpBasic().disable()
 
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), memberRepository))
+            .addFilter(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))))
+            .addFilter(new JwtAuthorizationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), memberRepository))
 
-                .authorizeRequests()
-                .antMatchers("/admin/**")
-                .access("hasRole('ROLE_ADMIN')")
-                .anyRequest().permitAll()
+            .authorizeRequests()
+            .antMatchers("/admin/**")
+            .access("hasRole('ROLE_ADMIN')")
+            .anyRequest().permitAll()
 
-                .and().build();
+            .and()
+            .oauth2Login()
+            .loginPage("/login")
+            .userInfoEndpoint()
+            .userService(principalOauth2UserService);
+
+        return http.build();
     }
 
 }

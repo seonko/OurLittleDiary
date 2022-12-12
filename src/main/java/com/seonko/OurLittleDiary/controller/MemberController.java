@@ -1,10 +1,14 @@
 package com.seonko.OurLittleDiary.controller;
 
+import com.seonko.OurLittleDiary.config.oauth.PrincipalOauth2UserService;
 import com.seonko.OurLittleDiary.dto.MemberDTO;
 import com.seonko.OurLittleDiary.service.MailService;
 import com.seonko.OurLittleDiary.service.MemberService;
+import com.seonko.OurLittleDiary.service.OauthService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 
 @AllArgsConstructor
@@ -13,6 +17,15 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MailService mailService;
+    private final OauthService oauthService;
+
+    // 구글 oauth
+    @GetMapping("/api/login/oauth")
+    public HashMap<String, String> googleOauth(@RequestParam String code) throws Exception {
+        HashMap<String, String> userinfo = new HashMap<>();
+        oauthService.getGoogleAccessToken(code);
+        return userinfo;
+    }
 
     // 회원가입
     @PostMapping("/api/signUp")

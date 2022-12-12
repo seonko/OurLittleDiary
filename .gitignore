@@ -40,3 +40,4 @@ out/
 
 src/main/resources/static/
 src/main/webapp/
+.env

@@ -16,7 +16,7 @@
         <a @click="socialLogin('kakao')">
           <img class="oauthButton" :src="require('@/assets/member/icon_kakao.png')"/>
         </a>
-        <a @click="socialLogin('google')">
+        <a @click="socialLogin()">
           <img class="oauthButton" :src="require('@/assets/member/icon_google.png')"/>
         </a>
         <a @click="socialLogin('naver')">
@@ -59,8 +59,12 @@ export default {
           alert('로그인 실패')
           console.log(err)
         })
+    },
+    socialLogin () {
+      window.location.href = 'http://localhost:8030/oauth2/authorization/google'
     }
   }
+
 }
 </script>
 
