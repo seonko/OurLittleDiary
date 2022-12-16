@@ -59,8 +59,12 @@ export default {
           alert('로그인 실패')
           console.log(err)
         })
+    },
+    socialLogin (provider) {
+      window.location.href = 'http://localhost:8030/oauth2/authorization/' + provider
     }
   }
+
 }
 </script>
 
