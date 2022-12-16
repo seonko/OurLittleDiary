@@ -23,7 +23,9 @@ public class MemberController {
     @GetMapping("/api/login/oauth")
     public HashMap<String, String> googleOauth(@RequestParam String code) throws Exception {
         HashMap<String, String> userinfo = new HashMap<>();
-        oauthService.getGoogleAccessToken(code);
+        String accessToken = oauthService.getGoogleAccessToken(code);
+        System.out.println(accessToken);
+        oauthService.getGoogleUserInfo(accessToken);
         return userinfo;
     }
 

@@ -16,7 +16,7 @@
         <a @click="socialLogin('kakao')">
           <img class="oauthButton" :src="require('@/assets/member/icon_kakao.png')"/>
         </a>
-        <a @click="socialLogin()">
+        <a @click="socialLogin('google')">
           <img class="oauthButton" :src="require('@/assets/member/icon_google.png')"/>
         </a>
         <a @click="socialLogin('naver')">
@@ -60,8 +60,8 @@ export default {
           console.log(err)
         })
     },
-    socialLogin () {
-      window.location.href = 'http://localhost:8030/oauth2/authorization/google'
+    socialLogin (provider) {
+      window.location.href = 'http://localhost:8030/oauth2/authorization/' + provider
     }
   }
 
